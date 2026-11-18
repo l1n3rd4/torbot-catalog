@@ -180,11 +180,13 @@ def is_onion_url(url):
     return bool(re.search(r"\.onion\b", url))
 
 
-# ── Trobot integration ─────────────────────────────────────────────────────
+# ── Trobot integration core ─────────────────────────────────────────────────
+# Usa os módulos do Trobot para o trabalho pesado de crawling
+
 def fetch_page_with_torbot(domain):
     """
-    Busca uma página via Trobot (httpx SOCKS5) e extrai metadados.
-    Também extrai links internos e segue até MAX_CHILDREN.
+    Busca uma página usando o Trobot (LinkTree + fetch_html).
+    Usa a estrutura do projeto local /home/ubuntu/tools/TorBot/.
     """
     result = {
         "domain": domain,
@@ -200,34 +202,65 @@ def fetch_page_with_torbot(domain):
         "children_found": 0,
         "children_followed": 0,
     }
-    try:
-        resp = http_client.get(domain, follow_redirects=True)
-        body = resp.content
-        if len(body) > 50:
-            meta = extract_metadata(body)
-            result["title"] = meta["title"]
-            result["description"] = meta["description"]
-            lang_text = (meta["title"] + " " + meta["description"]).strip()
-            if not lang_text:
-                lang_text = body.decode("utf-8", errors="ignore")[:2000]
-            result["language"] = detect_language(lang_text)
-            result["category"] = categorize(meta["title"], meta["description"])
-            if is_routing_site(meta["title"], meta["description"]):
-                if result["category"] == DEFAULT_CATEGORY:
-                    result["category"] = "generic"
-            result["status"] = "success"
 
-            # Extrair e seguir links internos (hashmap dedup)
-            links = extract_links(body)
-            onion_links = [l for l in links if is_onion_url(l)]
-            result["children_found"] = len(onion_links)
-            for child in onion_links:
-                normalized = child.split("?")[0].split("#")[0].rstrip("/") + "/"
-                if normalized not in VISITED_URLS:
-                    VISITED_URLS.add(normalized)
-                    result["children_followed"] += 1
+    # Configurar o cliente SOCKS5 (httpx 0.27 apenas suporta socks5://)
+    client = httpx.Client(
+        proxy=TOR_SOCKS_PROXY,
+        timeout=Timeout(TIMEOUT, read=TIMEOUT, write=TIMEOUT, connect=TIMEOUT),
+        follow_redirects=True,
+        verify=False,
+    )
+
+    try:
+        # Usar o LinkTree do Trobot para crawler
+        tree = LinkTree(root=domain, client=client, depth=1)
+        tree.crawl()
+
+        # Extrair resultados do LinkTree
+        for node in tree.all_nodes_itr():
+            title = node.data.title if hasattr(node.data, 'title') and node.data.title else ""
+            description = ""
+            if hasattr(node.data, 'description') and node.data.description:
+                description = node.data.description
+
+            if title:
+                result["title"] = title[:300]
+                result["description"] = description[:500]
+
+                # Unificar linguagem
+                lang_text = (title + " " + description).strip()
+                if not lang_text:
+                    lang_text = node.raw_content[:2000] if hasattr(node, 'raw_content') else body.decode('utf-8', errors='ignore')[:2000]
+                result["language"] = detect_language(lang_text)
+
+                # Categorizar
+                result["category"] = categorize(title, description)
+
+                if is_routing_site(title, description):
+                    if result["category"] == DEFAULT_CATEGORY:
+                        result["category"] = "generic"
+
+                result["status"] = "success"
+
+                # Extrair links internos
+                links = tree.all_links()
+                onion_links = [l for l in links if is_onion_url(l)]
+                result["children_found"] = len(onion_links)
+
+                # Seguir links filhos (hashmap dedup)
+                for child in onion_links:
+                    normalized = child.split("?")[0].split("#")[0].rstrip("/") + "/"
+                    if normalized not in VISITED_URLS:
+                        VISITED_URLS.add(normalized)
+                        result["children_followed"] += 1
+
+                break  # Só processar o primeiro nó
+
     except Exception as e:
         result["error"] = str(e)
+    finally:
+        client.close()
+
     return result
 
 
