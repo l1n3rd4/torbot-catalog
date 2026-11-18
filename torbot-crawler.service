@@ -1,0 +1,22 @@
+[Unit]
+Description=TorBot Dark Web Catalog Crawler (24/7 service)
+After=network.target tor.service
+After=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/torbot-catalog
+ExecStartPre=/bin/sleep 30
+ExecStart=/home/ubuntu/tools/TorBot/.venv/bin/python /home/ubuntu/torbot-catalog/dark-web-crawler-v2.py --max-children 50 --threads 4 --fast
+Restart=always
+RestartSec=30
+StandardOutput=append:/tmp/torbot_crawl.log
+StandardError=append:/tmp/torbot_crawl.log
+
+# Resource limits
+MemoryMax=2G
+CPUQuota=100%
+
+[Install]
+WantedBy=multi-user.target

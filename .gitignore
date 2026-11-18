@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Env
+.env
+.env.lock
+
+# Runtime crawler outputs (regenerável ou volátil)
+visited_urls.json
+results.json
+
+# OS
+.DS_Store
+Thumbs.db
