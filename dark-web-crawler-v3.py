@@ -9,6 +9,7 @@ Novidades:
   3. Leitura de CSV/JSON dentro do script (não script separado).
   4. Validação de linguagem unificada (detect_language()).
   5. Armazenamento com hashmap (VISITED_URLS) para evitar duplicados.
+  6. Salva catalog.csv incrementalmente durante o crawl (não só no final).
 
 Uso:
     /home/ubuntu/tools/TorBot/.venv/bin/python dark-web-crawler-v3.py              # modo interativo
@@ -35,13 +36,26 @@ from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ── Trobot / dependencies ───────────────────────────────────────────────────
+import sys
+import os
+# Adicionar o diretório do Trobot ao path
+TORBOT_SRC = os.path.expanduser("/home/ubuntu/tools/TorBot/src")
+if TORBOT_SRC not in sys.path:
+    sys.path.insert(0, TORBOT_SRC)
+
 try:
     import httpx
     from bs4 import BeautifulSoup
     import ijson
     from httpx import Timeout
+    # Módulos do Trobot
+    from torbot.crawl_result import CrawlResultAdapter
+    from torbot.modules.info import fetch_html, display_webpage_description
+    from torbot.modules.linktree import LinkTree, parse_links
+    from torbot.modules.api import get_ip
 except ImportError as e:
     print(f"[ERRO] Dependência faltando: {e}", flush=True)
+    print(f"[INFO] Caminho de busca: {TORBOT_SRC}", flush=True)
     sys.exit(1)
 
 # ── Configuração global ─────────────────────────────────────────────────────
@@ -86,7 +100,6 @@ http_client = httpx.Client(
     follow_redirects=True,
     verify=False,
 )
-
 
 # ── Validação de linguagem unificada ────────────────────────────────────────
 def detect_language(text):
@@ -182,11 +195,19 @@ def is_onion_url(url):
 
 # ── Trobot integration core ─────────────────────────────────────────────────
 # Usa os módulos do Trobot para o trabalho pesado de crawling
+# Variável global para o cliente HTTP compartilhado
+http_client = httpx.Client(
+    proxy=TOR_SOCKS_PROXY,
+    timeout=Timeout(TIMEOUT, read=TIMEOUT, write=TIMEOUT, connect=TIMEOUT),
+    follow_redirects=True,
+    verify=False,
+)
 
 def fetch_page_with_torbot(domain):
-    """
-    Busca uma página usando o Trobot (LinkTree + fetch_html).
+    """Busca uma página usando o Trobot (LinkTree + fetch_html).
+
     Usa a estrutura do projeto local /home/ubuntu/tools/TorBot/.
+    Usa um único cliente HTTP compartilhado para performance.
     """
     result = {
         "domain": domain,
@@ -203,18 +224,11 @@ def fetch_page_with_torbot(domain):
         "children_followed": 0,
     }
 
-    # Configurar o cliente SOCKS5 (httpx 0.27 apenas suporta socks5://)
-    client = httpx.Client(
-        proxy=TOR_SOCKS_PROXY,
-        timeout=Timeout(TIMEOUT, read=TIMEOUT, write=TIMEOUT, connect=TIMEOUT),
-        follow_redirects=True,
-        verify=False,
-    )
-
+    domain_url = domain if domain.startswith(('http://', 'https://')) else f'http://{domain}'
     try:
-        # Usar o LinkTree do Trobot para crawler
-        tree = LinkTree(root=domain, client=client, depth=1)
-        tree.crawl()
+        # Usar o cliente HTTP global (definido no módulo)
+        tree = LinkTree(url=domain_url, depth=1, client=http_client)
+        tree.load()
 
         # Extrair resultados do LinkTree
         for node in tree.all_nodes_itr():
@@ -255,19 +269,14 @@ def fetch_page_with_torbot(domain):
                         result["children_followed"] += 1
 
                 break  # Só processar o primeiro nó
-
     except Exception as e:
         result["error"] = str(e)
-    finally:
-        client.close()
 
     return result
-
 
 # ── Estado / persistence ────────────────────────────────────────────────────
 VISITED_URLS = set()
 STATE_FILE = STATE_JSON
-
 
 def load_visited(quiet=False):
     """Carrega estado persistido de URLs já visitadas."""
@@ -315,10 +324,24 @@ def scrape_all_domains(domains, quiet=False, fast=False, limit=None, max_childre
 
     results = []
     completed = 0
+    BATCH_SIZE = 25  # Salvar progresso a cada 25 domínios
+    total = len(domains)
+
+    # Garantir que o CSV existe com cabeçalho (apenas no início)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    fieldnames = [
+        "domain", "url", "status", "title", "description", "category",
+        "language", "error", "fetched_at", "via_proxy",
+        "children_found", "children_followed"
+    ]
+    if not os.path.exists(CSV_PATH):
+        with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+            writer.writeheader()
 
     with ThreadPoolExecutor(max_workers=THREADS) as executor:
         future_to_domain = {executor.submit(fetch_page_with_torbot, d): d for d in domains}
-        for future in as_completed(future_to_domain):
+        for i, future in enumerate(as_completed(future_to_domain), 1):
             domain = future_to_domain[future]
             try:
                 result = future.result()
@@ -326,8 +349,7 @@ def scrape_all_domains(domains, quiet=False, fast=False, limit=None, max_childre
                 if result["status"] == "success":
                     completed += 1
                     if not quiet:
-                        print(f"  ✓ {domain} -> {result['category']} [{result['language']}] "
-                              f"(children found: {result.get('children_found', 0)}, followed: {result.get('children_followed', 0)})", flush=True)
+                        print(f"  ✓ {domain} -> {result['category']} [{result['language']}]", flush=True)
                 else:
                     if not quiet:
                         print(f"  ✗ {domain} -> {result.get('error', 'unknown')}", flush=True)
@@ -336,8 +358,17 @@ def scrape_all_domains(domains, quiet=False, fast=False, limit=None, max_childre
                 results.append(result)
                 if not quiet:
                     print(f"  ✗ {domain} -> exception: {e}", flush=True)
-            time.sleep(REQUEST_DELAY)
-            completed += 1
+
+            # Salvar progresso e CSV incrementalmente
+            if completed % BATCH_SIZE == 0 or completed == total:
+                save_visited(quiet=quiet)
+                print(f"[INFO] Progresso: {completed}/{total} ({completed*100//total}%)", flush=True)
+                # Salvar CSV incrementalmente (append)
+                with open(CSV_PATH, "a", newline="", encoding="utf-8") as f:
+                    writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+                    for r in results:
+                        writer.writerow(r)
+
             if limit and completed >= limit:
                 break
 
@@ -414,7 +445,7 @@ def main():
     print("[INFO] Verificando conexão via Tor...", flush=True)
     try:
         resp = http_client.get("https://check.torproject.org/api/ip")
-        ip_match = re.search(r'"IP":\s*"([^"]+)"', resp.text)
+        ip_match = re.search(r'\"IP\":\s*\"([^\"]+)\"', resp.text)
         if ip_match:
             print(f"[OK] Tor proxy confirmado: exit node {ip_match.group(1)}", flush=True)
     except Exception as e:
@@ -423,13 +454,12 @@ def main():
 
     # 2. Baixar índice Ahmia
     print("[INFO] Baixando índice Ahmia...", flush=True)
+    domains = []
     try:
         resp = http_client.get(AHMI_INDEX_URL)
         resp.raise_for_status()
         raw = resp.text
-        # Extrair domínios .onion do HTML
         domains = re.findall(r'([a-z2-7]{56}\.onion)', raw)
-        # Remover duplicados (manter ordem)
         seen = set()
         unique_domains = []
         for d in domains:
@@ -438,11 +468,29 @@ def main():
                 unique_domains.append(d)
         print(f"[OK] {len(unique_domains)} domínios .onion únicos encontrados", flush=True)
     except Exception as e:
-        print(f"[ERRO] Não foi possível baixar o índice Ahmia: {e}", flush=True)
-        sys.exit(1)
+        print(f"[WARN] Download Ahmia falhou: {e}", flush=True)
+        print("[INFO] Tentando carregar índice em cache...", flush=True)
+        try:
+            cached_path = os.path.expanduser('~/ahmia_index.html')
+            if os.path.exists(cached_path):
+                with open(cached_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    raw = f.read()
+                domains = re.findall(r'([a-z2-7]{56}\.onion)', raw)
+                seen = set()
+                unique_domains = []
+                for d in domains:
+                    if d not in seen:
+                        seen.add(d)
+                        unique_domains.append(d)
+                print(f"[OK] {len(unique_domains)} domínios .onion carregados do cache", flush=True)
+            else:
+                raise Exception('Arquivo de cache não encontrado')
+        except Exception as e2:
+            print(f"[ERRO] Não foi possível baixar o índice Ahmia: {e2}", flush=True)
+            sys.exit(1)
 
     # 3. Scraping
-    print(f"[INFO] Iniciando crawl com {THREADS} threads...", flush=True)
+    print(f"[INFO] Iniciando crawl com {THREADS} threads... ", flush=True)
     results = scrape_all_domains(
         unique_domains,
         quiet=args.quiet,
@@ -452,7 +500,7 @@ def main():
     )
 
     # 4. Salvar resultados
-    print("[INFO] Salvando resultados...", flush=True)
+    print(f"[INFO] Salvando {len(results)} resultados... ", flush=True)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     fieldnames = [
         "domain", "url", "status", "title", "description", "category",
