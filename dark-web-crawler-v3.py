@@ -58,10 +58,20 @@ except ImportError as e:
     print(f"[INFO] Caminho de busca: {TORBOT_SRC}", flush=True)
     sys.exit(1)
 
+# ── Color utilities (terminal) ───────────────────────────────────────────────
+from torbot.modules.color import color
+
+# ── Updater (verificação de versões) ─────────────────────────────────────────
+from torbot.modules.updater import check_version
+
 # ── Configuração global ─────────────────────────────────────────────────────
-TOR_SOCKS_PROXY = "socks5://127.0.0.1:9050"   # httpx 0.27 só aceita socks5://
-AHMI_INDEX_URL = "https://ahmia.fi/onions/"
-OUTPUT_DIR = os.path.expanduser("~/torbot-catalog")
+# Usar configuração do Trobot para padronizar caminhos
+from torbot.modules.config import get_data_directory, project_root_directory
+
+# Tor SOCKS proxy (httpx 0.27 apenas aceita socks5://)
+TOR_SOCKS_PROXY = "socks5://127.0.0.1:9050"
+
+OUTPUT_DIR = get_data_directory()
 CSV_PATH = os.path.join(OUTPUT_DIR, "catalog.csv")
 META_JSON = os.path.join(OUTPUT_DIR, "results.json")
 STATE_JSON = os.path.join(OUTPUT_DIR, "visited_urls.json")
@@ -442,15 +452,27 @@ def main():
     load_visited(quiet=args.quiet)
 
     # 1. Verificar conexão via Tor
-    print("[INFO] Verificando conexão via Tor...", flush=True)
+    print("[INFO] Verificando conexão via Tor... ", flush=True)
     try:
         resp = http_client.get("https://check.torproject.org/api/ip")
         ip_match = re.search(r'\"IP\":\s*\"([^\"]+)\"', resp.text)
         if ip_match:
             print(f"[OK] Tor proxy confirmado: exit node {ip_match.group(1)}", flush=True)
+            # Usar get_ip para detectar o IP do Tor
+            from torbot.modules.api import get_ip
+            ip_info = get_ip(http_client)
+            print(f"[INFO] IP do Tor: {ip_info.get('body', 'unknown')}", flush=True)
     except Exception as e:
         print(f"[ERRO] Não foi possível conectar via Tor: {e}", flush=True)
         sys.exit(1)
+
+    # 2. Verificar versões dos módulos
+    print("[INFO] Verificando versões dos módulos... ", flush=True)
+    try:
+        from torbot.modules.updater import check_version
+        check_version()
+    except Exception as e:
+        print(f"[WARN] Não foi possível verificar versões: {e}", flush=True)
 
     # 2. Baixar índice Ahmia
     print("[INFO] Baixando índice Ahmia...", flush=True)
