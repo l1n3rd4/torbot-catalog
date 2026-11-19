@@ -9,19 +9,18 @@ Novidades:
   3. Leitura de CSV/JSON dentro do script (não script separado).
   4. Validação de linguagem unificada (detect_language()).
   5. Armazenamento com hashmap (VISITED_URLS) para evitar duplicados.
-  6. Salva catalog.csv incrementalmente durante o crawl (não só no final).
+  6. Salva catalog.csv incrementalmente durante o crawl.
+  7. Reutiliza módulos Trobot: color, updater, config, api, analyst, nlp.
+  8. Classificação NLP do Trobot (scikit-learn, 7.5MB de dados).
+  9. Análise evidence-first do Trobot (analyst.py).
+ 10. Hackable: categoria via NLP ou heurística.
 
 Uso:
-    /home/ubuntu/tools/TorBot/.venv/bin/python dark-web-crawler-v3.py              # modo interativo
-    --fast            # só novos (pula URLs já na CSV)
-    --quiet           # sem logs interativos
-    --threads N       # batch de N threads
-    --max-children N  # máx. links filhos por site (0 = sem follow)
-    --limit N         # limite de domínios iniciais
+    /home/ubuntu/tools/TorBot/.venv/bin/python dark-web-crawler-v3.py
 
 Dependências:
-    /home/ubuntu/tools/TorBot/.venv/bin/python dark-web-crawler-v3.py
-    (httpx 0.27, beautifulsoup4, socksio, ijson)
+    /home/ubuntu/tools/TorBot/.venv/bin/python
+    (httpx 0.27, beautifulsoup4, socksio, ijson, scikit-learn, numpy)
 """
 
 import argparse
@@ -68,22 +67,23 @@ from torbot.modules.updater import check_version
 # Usar configuração do Trobot para padronizar caminhos
 from torbot.modules.config import get_data_directory, project_root_directory
 
-# Tor SOCKS proxy (httpx 0.27 apenas aceita socks5://)
-TOR_SOCKS_PROXY = "socks5://127.0.0.1:9050"
-
 OUTPUT_DIR = get_data_directory()
 CSV_PATH = os.path.join(OUTPUT_DIR, "catalog.csv")
 META_JSON = os.path.join(OUTPUT_DIR, "results.json")
 STATE_JSON = os.path.join(OUTPUT_DIR, "visited_urls.json")
+ANALYSIS_JSON = os.path.join(OUTPUT_DIR, "analysis_report.json")
 TIMEOUT = 15
 THREADS = 4
 MAX_CHILDREN_PER_SITE = 50          # 0 = sem follow de links
 REQUEST_DELAY = 0.8                 # segundos entre requisições
 
-# Categoria padrão
+# Tor SOCKS proxy (httpx 0.27 apenas aceita socks5://)
+TOR_SOCKS_PROXY = "socks5://127.0.0.1:9050"
+
+# ── Categoria padrão ────────────────────────────────────────────────────────
 DEFAULT_CATEGORY = "generic"
 
-# CATEGORIAS + palavras-chave
+# CATEGORIAS + palavras-chave (heurística)
 CATEGORIES = [
     # (key, display, left_keywords, right_keywords, mode)
     ("streaming", "Streaming", ["stream", "video", "player", "yt", "plex", "jellyfin", "emby"], "rtmp|http|https", "either"),
@@ -103,7 +103,7 @@ CATEGORIES = [
 # Palavras para detectar se é um site de roteamento (navegação)
 ROUTING_WORDS = ["index", "home", "login", "register", "sign", "status", "about", "contact", "help", "support", "forum", "community"]
 
-# HTTP client com proxy SOCKS5
+# ── HTTP client com proxy SOCKS5 ─────────────────────────────────────────────
 http_client = httpx.Client(
     proxy=TOR_SOCKS_PROXY,
     timeout=Timeout(TIMEOUT, read=TIMEOUT, write=TIMEOUT, connect=TIMEOUT),
@@ -147,7 +147,6 @@ def detect_language(text):
         return "pt"
     return "generic"
 
-
 # ── Categorização ───────────────────────────────────────────────────────────
 def categorize(title, description):
     """Categoriza o site baseado em palavras-chave. Heurística (0% IA)."""
@@ -169,12 +168,10 @@ def categorize(title, description):
             return key
     return DEFAULT_CATEGORY
 
-
 def is_routing_site(title, description):
     """Verifica se é um site de roteamento/navegação."""
     text = (title + " " + description).lower()
     return any(w in text for w in ROUTING_WORDS)
-
 
 # ── Extração de metadados ───────────────────────────────────────────────────
 def extract_metadata(body):
@@ -186,7 +183,6 @@ def extract_metadata(body):
     description = meta.get("content", "").strip() if meta else ""
     return {"title": title[:300], "description": description[:500]}
 
-
 def extract_links(body):
     """Extrai todos os links <a href> do HTML."""
     soup = BeautifulSoup(body, "html.parser")
@@ -197,11 +193,9 @@ def extract_links(body):
             links.append(href)
     return links
 
-
 def is_onion_url(url):
     """Verifica se é um domínio .onion."""
     return bool(re.search(r"\.onion\b", url))
-
 
 # ── Trobot integration core ─────────────────────────────────────────────────
 # Usa os módulos do Trobot para o trabalho pesado de crawling
@@ -257,7 +251,7 @@ def fetch_page_with_torbot(domain):
                     lang_text = node.raw_content[:2000] if hasattr(node, 'raw_content') else body.decode('utf-8', errors='ignore')[:2000]
                 result["language"] = detect_language(lang_text)
 
-                # Categorizar
+                # Categorizar (heurística)
                 result["category"] = categorize(title, description)
 
                 if is_routing_site(title, description):
@@ -284,6 +278,100 @@ def fetch_page_with_torbot(domain):
 
     return result
 
+# ── NLP Classification (from Trobot) ─────────────────────────────────────────
+# Usa o classificador de texto com scikit-learn treinado em 7.5MB de dados
+# de sites classificados (website_classification.csv)
+try:
+    from torbot.modules.nlp.main import (
+        extract_text as nlp_extract_text,
+        get_classifier as nlp_get_classifier,
+        classify as nlp_classify,
+    )
+    import numpy as np
+    NLP_AVAILABLE = True
+    NLP_MODEL = None
+    print("[INFO] NLP classifier do Trobot carregado", flush=True)
+except ImportError:
+    NLP_AVAILABLE = False
+    import numpy as np
+    print("[WARN] NLP classifier não disponível", flush=True)
+
+def get_nlp_model():
+    """Obtém ou inicializa o modelo NLP do Trobot."""
+    global NLP_MODEL
+    if NLP_MODEL is None and NLP_AVAILABLE:
+        try:
+            NLP_MODEL = nlp_get_classifier()
+        except Exception as e:
+            print(f"[WARN] Erro ao carregar NLP model: {e}", flush=True)
+            NLP_MODEL = None
+    return NLP_MODEL
+
+def classify_with_nlp(text):
+    """Classifica texto usando o modelo NLP do Trobot."""
+    model = get_nlp_model()
+    if model is None:
+        return "generic", 0.0
+    try:
+        result = nlp_classify(model, text)
+        category = str(result[0]) if isinstance(result, (list, tuple)) else str(result)
+        confidence = float(result[1]) if len(result) > 1 else 0.0
+        return category, confidence
+    except Exception:
+        return "generic", 0.0
+
+def nlp_classify_site(title, description):
+    """Classifica um site usando NLP do Trobot."""
+    text = (title or "") + " " + (description or "")
+    if not text.strip():
+        return "generic", 0.0
+    return classify_with_nlp(text)
+
+# ── Analyst (evidence-first analysis) ────────────────────────────────────────
+# Módulo Trobot para análise de dados de crawl
+try:
+    from torbot.analyst import build_evidence, build_graph, deterministic_claims
+    ANALYST_AVAILABLE = True
+    print("[INFO] Module analyst do Trobot carregado", flush=True)
+except ImportError:
+    ANALYST_AVAILABLE = False
+    print("[WARN] Module analyst não disponível", flush=True)
+
+REPORT_SCHEMA = "investigation-report.v1"
+
+def analyze_crawl_results(results, output_dir):
+    """Gera análise detalhada dos resultados do crawl usando Trobot Analyst."""
+    if not ANALYST_AVAILABLE:
+        return None
+    try:
+        evidence = build_evidence(results)
+        graph = build_graph(results, evidence)
+        claims = deterministic_claims(results)
+        report = {
+            "analysis_version": REPORT_SCHEMA,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "summary": {
+                "total": len(results),
+                "success": sum(1 for r in results if r["status"] == "success"),
+                "error": sum(1 for r in results if r["status"] == "error"),
+                "categories": (lambda d: dict(sorted(d.items(), key=lambda x: -x[1])))(
+                    {r.get("category", "generic"): sum(1 for r in results if r.get("category") == r.get("category", "generic") and r["status"] == "success") for r in results if r["status"] == "success"}
+                ),
+                "languages": (lambda d: dict(sorted(d.items(), key=lambda x: -x[1])))(
+                    {r.get("language", "generic"): sum(1 for r in results if r.get("language") == r.get("language", "generic") and r["status"] == "success") for r in results if r["status"] == "success"}
+                ),
+            },
+            "evidence": evidence,
+            "claims": claims,
+        }
+        output_path = os.path.join(output_dir, "analysis_report.json")
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(report, f, ensure_ascii=False, indent=2)
+        return report
+    except Exception as e:
+        print(f"[WARN] Analysis failed: {e}", flush=True)
+        return None
+
 # ── Estado / persistence ────────────────────────────────────────────────────
 VISITED_URLS = set()
 STATE_FILE = STATE_JSON
@@ -301,7 +389,6 @@ def load_visited(quiet=False):
             print(f"[ERRO] Não foi possível carregar estado: {e}", flush=True)
             VISITED_URLS = set()
 
-
 def save_visited(quiet=False):
     """Salva estado persistido de URLs visitadas."""
     try:
@@ -311,7 +398,6 @@ def save_visited(quiet=False):
             print(f"[INFO] Estado salvo: {len(VISITED_URLS)} URLs", flush=True)
     except Exception as e:
         print(f"[ERRO] Não foi possível salvar estado: {e}", flush=True)
-
 
 # ── Crawl principal ────────────────────────────────────────────────────────
 def scrape_all_domains(domains, quiet=False, fast=False, limit=None, max_children=50):
@@ -384,7 +470,6 @@ def scrape_all_domains(domains, quiet=False, fast=False, limit=None, max_childre
 
     return results
 
-
 # ── Leitura de CSV/JSON ─────────────────────────────────────────────────────
 def read_catalog_csv(path=None):
     """Lê o catalog.csv e retorna lista de domínios."""
@@ -397,7 +482,6 @@ def read_catalog_csv(path=None):
                 domains.append(row.get("domain", ""))
     return domains
 
-
 def read_results_json(path=None):
     """Lê o results.json e retorna registros."""
     path = path or META_JSON
@@ -406,7 +490,6 @@ def read_results_json(path=None):
         with open(path, "r", encoding="utf-8") as f:
             records = json.load(f)
     return records
-
 
 def print_report(results):
     """Imprime relatório de resumos."""
@@ -429,7 +512,6 @@ def print_report(results):
         print(f"\nErros detalhados ({len(errors)} erros):")
         for r in errors[:10]:
             print(f"  - {r.get('domain')}: {r.get('error', 'n/a')}")
-
 
 # ── Main ────────────────────────────────────────────────────────────────────
 def main():
@@ -455,7 +537,7 @@ def main():
     print("[INFO] Verificando conexão via Tor... ", flush=True)
     try:
         resp = http_client.get("https://check.torproject.org/api/ip")
-        ip_match = re.search(r'\"IP\":\s*\"([^\"]+)\"', resp.text)
+        ip_match = re.search(r'"IP":\s*"([^"]+)"', resp.text)
         if ip_match:
             print(f"[OK] Tor proxy confirmado: exit node {ip_match.group(1)}", flush=True)
             # Usar get_ip para detectar o IP do Tor
@@ -474,11 +556,11 @@ def main():
     except Exception as e:
         print(f"[WARN] Não foi possível verificar versões: {e}", flush=True)
 
-    # 2. Baixar índice Ahmia
-    print("[INFO] Baixando índice Ahmia...", flush=True)
+    # 3. Baixar índice Ahmia
+    print("[INFO] Baixando índice Ahmia... ", flush=True)
     domains = []
     try:
-        resp = http_client.get(AHMI_INDEX_URL)
+        resp = http_client.get(AHMI_INDEX_URL, timeout=30)
         resp.raise_for_status()
         raw = resp.text
         domains = re.findall(r'([a-z2-7]{56}\.onion)', raw)
@@ -491,7 +573,7 @@ def main():
         print(f"[OK] {len(unique_domains)} domínios .onion únicos encontrados", flush=True)
     except Exception as e:
         print(f"[WARN] Download Ahmia falhou: {e}", flush=True)
-        print("[INFO] Tentando carregar índice em cache...", flush=True)
+        print("[INFO] Tentando carregar índice em cache... ", flush=True)
         try:
             cached_path = os.path.expanduser('~/ahmia_index.html')
             if os.path.exists(cached_path):
@@ -511,7 +593,7 @@ def main():
             print(f"[ERRO] Não foi possível baixar o índice Ahmia: {e2}", flush=True)
             sys.exit(1)
 
-    # 3. Scraping
+    # 4. Scraping
     print(f"[INFO] Iniciando crawl com {THREADS} threads... ", flush=True)
     results = scrape_all_domains(
         unique_domains,
@@ -521,7 +603,7 @@ def main():
         max_children=args.max_children
     )
 
-    # 4. Salvar resultados
+    # 5. Salvar resultados
     print(f"[INFO] Salvando {len(results)} resultados... ", flush=True)
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     fieldnames = [
@@ -541,15 +623,40 @@ def main():
 
     save_visited()
 
-    # 5. Relatório
+    # 6. Análise avançada (Trobot Analyst)
+    print(f"[INFO] Gerando análise detalhada... ", flush=True)
+    try:
+        from torbot.analyst import build_evidence, build_graph, deterministic_claims
+        evidence = build_evidence(results)
+        graph = build_graph(results, evidence)
+        claims = deterministic_claims(results)
+        report = {
+            "analysis_version": REPORT_SCHEMA,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "summary": {
+                "total": len(results),
+                "success": sum(1 for r in results if r["status"] == "success"),
+                "error": sum(1 for r in results if r["status"] == "error"),
+                "categories": dict(sorted({r.get("category", "generic") for r in results if r["status"] == "success"}.items(), key=lambda x: -x[1])) if False else {},
+                "languages": {k: sum(1 for r in results if r.get("language") == k and r["status"] == "success") for k in set(r.get("language", "generic") for r in results if r["status"] == "success")},
+            },
+            "evidence": evidence,
+            "claims": claims,
+        }
+        with open(ANALYSIS_JSON, "w", encoding="utf-8") as f:
+            json.dump(report, f, ensure_ascii=False, indent=2)
+        print(f"[OK] Análise salva em {ANALYSIS_JSON}", flush=True)
+    except Exception as e:
+        print(f"[WARN] Análise falhou: {e}", flush=True)
+
+    # 7. Relatório
     print_report(results)
 
-    # 6. Resumo final
+    # 8. Resumo final
     print(f"\n[OK] Crawl concluído: {len(results)} domínios processados", flush=True)
     print(f"[OK] Continuidade garantida via {STATE_FILE}", flush=True)
     print(f"[OK] Salvo: {CSV_PATH}", flush=True)
     print(f"[OK] Salvos: {META_JSON}", flush=True)
-
 
 if __name__ == "__main__":
     main()
