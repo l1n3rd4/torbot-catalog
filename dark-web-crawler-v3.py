@@ -207,12 +207,14 @@ http_client = httpx.Client(
     verify=False,
 )
 
-def fetch_page_with_torbot(domain):
+def fetch_page_with_torbot(domain, max_retries=3):
     """Busca uma página usando o Trobot (LinkTree + fetch_html).
 
     Usa a estrutura do projeto local /home/ubuntu/tools/TorBot/.
     Usa um único cliente HTTP compartilhado para performance.
+    Inclui rotação automática de circuito (NewCircuit/NewNYM) quando o IP é bloqueado.
     """
+    global rotation_count
     result = {
         "domain": domain,
         "url": domain,
@@ -229,52 +231,79 @@ def fetch_page_with_torbot(domain):
     }
 
     domain_url = domain if domain.startswith(('http://', 'https://')) else f'http://{domain}'
-    try:
-        # Usar o cliente HTTP global (definido no módulo)
-        tree = LinkTree(url=domain_url, depth=1, client=http_client)
-        tree.load()
+    attempt = 0
+    max_attempts = max_retries + 1  # +1 para tentativa inicial
 
-        # Extrair resultados do LinkTree
-        for node in tree.all_nodes_itr():
-            title = node.data.title if hasattr(node.data, 'title') and node.data.title else ""
-            description = ""
-            if hasattr(node.data, 'description') and node.data.description:
-                description = node.data.description
+    while attempt < max_attempts:
+        try:
+            # Usar o cliente HTTP global (definido no módulo)
+            tree = LinkTree(url=domain_url, depth=1, client=http_client)
+            tree.load()
 
-            if title:
-                result["title"] = title[:300]
-                result["description"] = description[:500]
+            # Extrair resultados do LinkTree
+            for node in tree.all_nodes_itr():
+                title = node.data.title if hasattr(node.data, 'title') and node.data.title else ""
+                description = ""
+                if hasattr(node.data, 'description') and node.data.description:
+                    description = node.data.description
 
-                # Unificar linguagem
-                lang_text = (title + " " + description).strip()
-                if not lang_text:
-                    lang_text = node.raw_content[:2000] if hasattr(node, 'raw_content') else body.decode('utf-8', errors='ignore')[:2000]
-                result["language"] = detect_language(lang_text)
+                if title:
+                    result["title"] = title[:300]
+                    result["description"] = description[:500]
 
-                # Categorizar (heurística)
-                result["category"] = categorize(title, description)
+                    # Unificar linguagem
+                    lang_text = (title + " " + description).strip()
+                    if not lang_text:
+                        lang_text = node.raw_content[:2000] if hasattr(node, 'raw_content') else body.decode('utf-8', errors='ignore')[:2000]
+                    result["language"] = detect_language(lang_text)
 
-                if is_routing_site(title, description):
-                    if result["category"] == DEFAULT_CATEGORY:
-                        result["category"] = "generic"
+                    # Categorizar (heurística)
+                    result["category"] = categorize(title, description)
 
-                result["status"] = "success"
+                    if is_routing_site(title, description):
+                        if result["category"] == DEFAULT_CATEGORY:
+                            result["category"] = "generic"
 
-                # Extrair links internos
-                links = tree.all_links()
-                onion_links = [l for l in links if is_onion_url(l)]
-                result["children_found"] = len(onion_links)
+                    result["status"] = "success"
 
-                # Seguir links filhos (hashmap dedup)
-                for child in onion_links:
-                    normalized = child.split("?")[0].split("#")[0].rstrip("/") + "/"
-                    if normalized not in VISITED_URLS:
-                        VISITED_URLS.add(normalized)
-                        result["children_followed"] += 1
+                    # Extrair links internos
+                    links = tree.all_links()
+                    onion_links = [l for l in links if is_onion_url(l)]
+                    result["children_found"] = len(onion_links)
 
-                break  # Só processar o primeiro nó
-    except Exception as e:
-        result["error"] = str(e)
+                    # Seguir links filhos (hashmap dedup)
+                    for child in onion_links:
+                        normalized = child.split("?")[0].split("#")[0].rstrip("/") + "/"
+                        if normalized not in VISITED_URLS:
+                            VISITED_URLS.add(normalized)
+                            result["children_followed"] += 1
+
+                    break  # Só processar o primeiro nó
+            if result["status"] == "success":
+                return result
+        except Exception as e:
+            error_msg = str(e)
+            result["error"] = error_msg
+            
+            # Verificar se é um erro de bloqueio de proxy (exit node)
+            is_proxy_blocked = any([
+                "Proxy Server could not connect" in error_msg,
+                "Host unreachable" in error_msg,
+                "timed out" in error_msg.lower(),
+                "TTL expired" in error_msg,
+            ])
+            
+            if is_proxy_blocked and attempt < max_retries:
+                print(f"[WARN] Site bloqueado pelo exit node: {domain}", flush=True)
+                print(f"[INFO] Rodando nova rota (NewCircuit/NewNym)... ", flush=True)
+                if rotate_tor_circuit():
+                    attempt += 1
+                    continue
+                else:
+                    break
+            else:
+                # Outro erro, não rotacionar
+                break
 
     return result
 
@@ -399,7 +428,51 @@ def save_visited(quiet=False):
     except Exception as e:
         print(f"[ERRO] Não foi possível salvar estado: {e}", flush=True)
 
-# ── Crawl principal ────────────────────────────────────────────────────────
+# ── Circuit rotation (NewCircuit / NewNym) ────────────────────────────────────
+# Rotaciona o exit node do Tor quando os sites bloqueiam o IP atual
+import subprocess
+import time as time_mod
+
+CIRCUIT_ROTATION_INTERVAL = 50       # Tentativas antes de rotacionar
+CIRCUIT_ROTATION_DELAY = 30          # Segundos entre rotações
+
+rotation_count = 0
+
+def rotate_tor_circuit():
+    """
+    Rota o circuito do Tor para obter um novo exit node.
+    Usa `systemctl restart tor` (ou `tor --Signal NEWNYM` se disponível).
+    Retorno: True se a rotação foi bem-sucedida, False caso contrário.
+    """
+    global rotation_count
+    try:
+        print(f"[INFO] Rotacionando circuito Tor (tentativa {rotation_count + 1})... ", flush=True)
+        # Restaurar o serviço do Tor
+        result = subprocess.run(
+            ["sudo", "systemctl", "restart", "tor"],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            # Aguardar conexão do novo circuito
+            time_mod.sleep(CIRCUIT_ROTATION_DELAY)
+            # Verificar se o Tor está ativo
+            result2 = subprocess.run(
+                ["systemctl", "is-active", "tor"],
+                capture_output=True, text=True, timeout=10
+            )
+            if result2.stdout.strip() == "active":
+                print("[OK] Novo circuito Tor ativado", flush=True)
+                rotation_count += 1
+                return True
+            else:
+                print("[ERRO] Tor não está mais ativo após reinício", flush=True)
+                return False
+        else:
+            print(f"[ERRO] Falha ao reiniciar Tor: {result.stderr}", flush=True)
+            return False
+    except Exception as e:
+        print(f"[ERRO] Erro na rotação: {e}", flush=True)
+        return False
 def scrape_all_domains(domains, quiet=False, fast=False, limit=None, max_children=50):
     """Scrape todos os domínios. Cada domínio pode gerar até `max_children` links filhos."""
     global MAX_CHILDREN_PER_SITE, VISITED_URLS
