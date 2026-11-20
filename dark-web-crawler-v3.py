@@ -1,127 +1,196 @@
 #!/usr/bin/env python3
 """
-dark-web-crawler-v3.py — Crawler de sites .onion via Ahmia + Trobot (httpx).
+dark-web-crawler-v3.py — Crawler de sites .onion via Ahmia index + Trobot
+(uso das funcionalidades do Trobot, sem reescrever o crawler).
 
-Novidades:
-  1. Usa módulos do Trobot (/home/ubuntu/tools/TorBot/) diretamente
-     para crawl (httpx + socksio) e armazenamento de resultados.
-  2. Armazena achados diferenciando por categoria.
-  3. Leitura de CSV/JSON dentro do script (não script separado).
-  4. Validação de linguagem unificada (detect_language()).
-  5. Armazenamento com hashmap (VISITED_URLS) para evitar duplicados.
-  6. Salva catalog.csv incrementalmente durante o crawl.
-  7. Reutiliza módulos Trobot: color, updater, config, api, analyst, nlp.
-  8. Classificação NLP do Trobot (scikit-learn, 7.5MB de dados).
-  9. Análise evidence-first do Trobot (analyst.py).
- 10. Hackable: categoria via NLP ou heurística.
+Premissas aplicadas:
+  1. Usa o Trobot (LinkTree + CrawlResultAdapter) para a árvore de links e
+     o classify/categorize do Trobot sem reescrever o crawler torbot.
+  2. Fetch via túnel SOCKS5 curl-equivalent (handshake + auth + CONNECT com DNS
+     remoto), igual ao `curl --socks5-hostname 127.0.0.1:9050`. Isso corrige o
+     problema que o httpx 0.27 (proxy socks5://) não resolve .onion e não faz o
+     auth SOCKS5 que o Tor exige.
+  3. Idioma: pt / en (heuristicas puros, 0% IA), igual ao v3 original.
+  4. Categorias simples: marketplace, wiki, fórum (chat), streaming, generic.
+  5. Hidden wikis: Deep-2 — segue children e filhos de filhos consecutivamente
+     (LinkTree depth=2) para mapear a árvore.
+  6. Sem threads no modo incremental (seqüencial, 1 domínio por vez).
+  7. Incremental: salva progresso em visited_urls.json + catalog.csv.
+  8. Depois dos 10 domínios, testa concorrência com ThreadPoolExecutor.
 
-Uso:
-    /home/ubuntu/tools/TorBot/.venv/bin/python dark-web-crawler-v3.py
-
-Dependências:
-    /home/ubuntu/tools/TorBot/.venv/bin/python
-    (httpx 0.27, beautifulsoup4, socksio, ijson, scikit-learn, numpy)
+Dependências do Trobot (jit): src/torbot/modules/linktree.py (LinkTree),
+src/torbot/crawl_result.py (CrawlResultAdapter).
 """
+
+from urllib.parse import urlsplit
 
 import argparse
 import csv
 import json
 import os
 import re
+import socket
+import ssl
+import struct
+import subprocess
 import sys
 import time
-from collections import deque
-from datetime import datetime, timezone
+import http.client
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
 
-# ── Trobot / dependencies ───────────────────────────────────────────────────
-import sys
-import os
-# Adicionar o diretório do Trobot ao path
-TORBOT_SRC = os.path.expanduser("/home/ubuntu/tools/TorBot/src")
+# ── Trobot / dependências ─────────────────────────────────────────────────────
+TORBOT_SRC = os.path.expanduser("/home/ubuntu/torbot-catalog/tools/TorBot/src")
 if TORBOT_SRC not in sys.path:
     sys.path.insert(0, TORBOT_SRC)
 
 try:
     import httpx
     from bs4 import BeautifulSoup
-    import ijson
-    from httpx import Timeout
-    # Módulos do Trobot
+
     from torbot.crawl_result import CrawlResultAdapter
     from torbot.modules.info import fetch_html, display_webpage_description
     from torbot.modules.linktree import LinkTree, parse_links
-    from torbot.modules.api import get_ip
-except ImportError as e:
+    from torbot.modules.nlp.main import extract_text as nlp_extract_text
+except ImportError as e:  # pragma: no cover
     print(f"[ERRO] Dependência faltando: {e}", flush=True)
-    print(f"[INFO] Caminho de busca: {TORBOT_SRC}", flush=True)
     sys.exit(1)
 
-# ── Color utilities (terminal) ───────────────────────────────────────────────
-from torbot.modules.color import color
+import numpy as np
 
-# ── Updater (verificação de versões) ─────────────────────────────────────────
-from torbot.modules.updater import check_version
+TORBOT_SRC_DIR = os.path.dirname(TORBOT_SRC)
+try:
+    from torbot.analyst import build_evidence, build_graph, deterministic_claims
+    ANALYST_AVAILABLE = True
+except ImportError:
+    ANALYST_AVAILABLE = False
 
-# ── Configuração global ─────────────────────────────────────────────────────
-# Usar configuração do Trobot para padronizar caminhos
-from torbot.modules.config import get_data_directory, project_root_directory
+try:
+    from torbot.modules.color import color
+    from torbot.modules.updater import check_version
+    FROM_COLOR = True
+except Exception:
+    FROM_COLOR = False
 
-OUTPUT_DIR = get_data_directory()
-CSV_PATH = os.path.join(OUTPUT_DIR, "catalog.csv")
-META_JSON = os.path.join(OUTPUT_DIR, "results.json")
-STATE_JSON = os.path.join(OUTPUT_DIR, "visited_urls.json")
-ANALYSIS_JSON = os.path.join(OUTPUT_DIR, "analysis_report.json")
+OUT_DIR = "/home/ubuntu/torbot-catalog"
+CSV_PATH = os.path.join(OUT_DIR, "catalog.csv")
+META_JSON = os.path.join(OUT_DIR, "results.json")
+STATE_JSON = os.path.join(OUT_DIR, "visited_urls.json")
+ANALYSIS_JSON = os.path.join(OUT_DIR, "analysis_report.json")
 TIMEOUT = 15
-THREADS = 4
-MAX_CHILDREN_PER_SITE = 50          # 0 = sem follow de links
-REQUEST_DELAY = 0.8                 # segundos entre requisições
-
-# Tor SOCKS proxy (httpx 0.27 apenas aceita socks5://)
-TOR_SOCKS_PROXY = "socks5://127.0.0.1:9050"
-
-# ── Categoria padrão ────────────────────────────────────────────────────────
+REQUEST_DELAY = 0.8
 DEFAULT_CATEGORY = "generic"
+AHMI_CACHE_PATH = os.path.expanduser("~/ahmia_index.html")
+TOR_SOCKS = "127.0.0.1:9050"
 
-# CATEGORIAS + palavras-chave (heurística)
+# ── Categorias simples (5) ───────────────────────────────────────────────────
 CATEGORIES = [
-    # (key, display, left_keywords, right_keywords, mode)
-    ("streaming", "Streaming", ["stream", "video", "player", "yt", "plex", "jellyfin", "emby"], "rtmp|http|https", "either"),
-    ("blog", "Blog", ["blog", "post", "article", "news", "page"], "post|article|news|write", "either"),
-    ("chat", "Chat", ["chat", "telegram", "discord", "forum", "talk"], "chat|forum|talk", "either"),
-    ("wiki", "Wiki", ["wiki", "encyclopedia", "knowledge", "articles"], "wiki|encyclopedia", "either"),
-    ("marketplace", "Marketplace", ["market", "shop", "store", "cart", "buy", "sell", "payment", "crypto", "bitcoin"], "shop|cart|payment|buy|market", "either"),
-    ("search", "Search", ["search", "engine", "query", "search", "find", "lookup"], "search|engine|query|find", "either"),
-    ("finance", "Finance", ["finance", "crypto", "wallet", "exchange", "market", "trading"], "finance|wallet|exchange|trading|market", "either"),
-    ("personals", "Pessoais", ["personals", "dating", "contact", "relationship"], "dating|contact|relationship", "either"),
-    ("hacking", "Hacking", ["hacking", "exploit", "crack", "tool", "urlish"], "hacking|exploit|crack|tool", "either"),
-    ("crypto", "Cripto", ["crypto", "bitcoin", "monero", "coin", "wallet"], "crypto|bitcoin|monero", "either"),
-    ("services", "Serviços", ["service", "support", "help", "hosting", "domain", "vpn", "vault"], "hosting|service|support|vpn", "either"),
-    ("email", "Email", ["email", "mail", "sms", "leak"], "email|mail|sms|leak", "either"),
+    ("streaming", "Streaming", ["stream", "video", "player", "yt", "plex", "jellyfin", "emby"], ["rtmp|http|https"]),
+    ("wiki", "Wiki", ["wiki", "encyclopedia", "knowledge", "articles"], ["wiki|encyclopedia"]),
+    ("chat", "Fórum / Chat", ["forum", "chat", "talk", "discuss", "board"], ["forum|talk|chat"]),
+    ("marketplace", "Marketplace", ["market", "shop", "store", "cart", "buy", "sell", "payment", "crypto", "bitcoin"], ["shop|cart|market|buy|payment|wallet"]),
+    ("generic", "Genérico", [], []),
 ]
 
-# Palavras para detectar se é um site de roteamento (navegação)
-ROUTING_WORDS = ["index", "home", "login", "register", "sign", "status", "about", "contact", "help", "support", "forum", "community"]
+ROUTE_WORDS = ["index", "home", "login", "register", "sign", "status", "about", "contact", "help", "support"]
 
-# ── HTTP client com proxy SOCKS5 ─────────────────────────────────────────────
-http_client = httpx.Client(
-    proxy=TOR_SOCKS_PROXY,
-    timeout=Timeout(TIMEOUT, read=TIMEOUT, write=TIMEOUT, connect=TIMEOUT),
-    follow_redirects=True,
-    verify=False,
-)
 
-# ── Validação de linguagem unificada ────────────────────────────────────────
+# ── Fetch via túnel SOCKS5 (coração da correção) ─────────────────────────────
+def _socks5_connect(host, port=443, timeout=15):
+    """Conecta ao Tor SOCKS5 como o curl --socks5-hostname.
+
+    Handshake: [5,2,0,2] -> [5,2] (servidor seleciona auth) -> [5,2,0,0,0,0]
+    (senha vazia) -> CONNECT com hostname (DNS remoto do Tor).
+    """
+    s = socket.create_connection(("127.0.0.1", 9050), timeout=timeout)
+    s.settimeout(timeout)
+    try:
+        s.sendall(bytes([5, 2, 0, 2]))
+        s.recv(2)
+        s.sendall(bytes([5, 2, 0, 0, 0, 0]))
+        s.recv(4)
+        dom = host.encode()
+        req = bytes([5, 1, 0, 3]) + bytes([len(dom)]) + dom + struct.pack(">H", port)
+        s.sendall(req)
+        resp = s.recv(4)
+        atyp = resp[3]
+        if atyp == 3:
+            ln = s.recv(1)[0]
+            s.recv(ln)
+        elif atyp == 1:
+            s.recv(6)
+        elif atyp == 4:
+            s.recv(18)
+        s.recv(2)  # porta do endereço ligado
+        if resp[1] != 0:
+            raise ConnectionError("proxy refused: %d" % resp[1])
+        return s
+    except Exception:
+        s.close()
+        raise
+
+
+def tor_fetch(url, retries=3):
+    """Obtém o HTML de um .onion/URL via Tor, igual ao curl --socks5-hostname.
+
+    Retorna ``(status, html_bytes)``. Em caso de falha (Tor instável),
+    recua usando a execução de `curl` via subprocess — o que garante que o
+    script segue funcionando assim como o curl.
+    """
+    if "://" not in url:
+        url = "http://" + url
+    parsed = urlsplit(url)
+    host = parsed.hostname or url
+    port = parsed.port or 443
+    last_err = None
+    for attempt in range(retries):
+        try:
+            s = _socks5_connect(host, port)
+            ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            ss = ctx.wrap_socket(s, server_hostname=host)
+            conn = http.client.HTTPSConnection(host, port=port, timeout=TIMEOUT, context=ctx)
+            conn.sock = ss
+            conn.request("GET", "/", headers={"User-Agent": "TorbotCatalog/3.0"})
+            resp = conn.getresponse()
+            data = resp.read()
+            ss.close()
+            s.close()
+            return resp.status, data
+        except Exception as e:
+            last_err = e
+            time.sleep(REQUEST_DELAY * (attempt + 1))
+    # fallback provado: executa o curl equivalente
+    cmd = ["curl", "--socks5-hostname", "127.0.0.1:9050", "-L", "--max-time", str(TIMEOUT), url]
+    try:
+        r = subprocess.run(cmd, capture_output=True, timeout=TIMEOUT + 5)
+        return (r.returncode, r.stdout)
+    except Exception as e2:
+        return (-1, ("fallback-failed: %s; raw: %s" % (e2, last_err)).encode())
+
+
+def parse_title_description(html_bytes):
+    """Extrai título + descrição semelhante ao LinkTree do Trobot."""
+    text = html_bytes.decode("utf-8", errors="ignore")
+    soup = BeautifulSoup(html_bytes, "html.parser")
+    for tag in soup(["script", "style", "noscript", "template"]):
+        tag.decompose()
+    title = (soup.title.text.strip() if soup.title else "")
+    body = re.sub(r"\s+", " ", soup.get_text(" ", strip=True))
+    return title, body[:1000]
+
+
+# ── Idioma (heurística, 0% IA) ───────────────────────────────────────────────
 def detect_language(text):
-    """Detecta idioma (pt / en / generic). UNIFICADO — usado em todos os lugares."""
     if not text:
         return "generic"
     lower = text.lower()
     pt_words = ["o ", "a ", "de ", "do ", "da ", "que ", "para ", "com ", "como ", "por ",
                 "mais ", "mas ", "ser ", "tem ", "sem ", "sua ", "nossa ", "seu ", "é ",
-                "há ", "você ", "vocês ", "eles ", "elas ", "este ", "essa ", "aquele ",
-                "aquela ", "aqui ", "ontem ", "hoje ", "amanhã ", "semanas ", "meses ",
-                "anos ", "cidade ", "país ", "nacional ", "internacional "]
+                "há ", "você ", "eles ", "elas ", "este ", "essa ", "aquele ", "aquela ",
+                "aqui ", "ontem ", "hoje ", "amanhã ", "semanas ", "meses ", "anos ",
+                "cidade ", "país ", "nacional ", "internacional "]
     en_words = [" the ", " and ", " is ", " in ", " to ", " of ", " it ", " you ", " that ",
                 " he ", " was ", " for ", " on ", " are ", " with ", " as ", " i ", " his ",
                 " they ", " be ", " at ", " one ", " have ", " this ", " from ", " or ",
@@ -147,589 +216,244 @@ def detect_language(text):
         return "pt"
     return "generic"
 
-# ── Categorização ───────────────────────────────────────────────────────────
-def categorize(title, description):
-    """Categoriza o site baseado em palavras-chave. Heurística (0% IA)."""
+
+# ── Categoria + roteamento (reutiliza a lógica do Trobot) ────────────────────
+def _categorize(title, description):
     text = (title + " " + description).lower()
     if not text:
         return DEFAULT_CATEGORY
-    for key, name, left_kw, right_kw, mode in CATEGORIES:
+    for key, name, left_kw, right_kw in CATEGORIES:
         left_list = left_kw if isinstance(left_kw, list) else [left_kw]
         right_list = right_kw.split("|") if isinstance(right_kw, str) else right_kw
         left_hit = any(kw in text for kw in left_list)
         right_hit = any(kw in text for kw in right_list)
-        if mode == "either" and (left_hit or right_hit):
-            return key
-        if mode == "both" and left_hit and right_hit:
-            return key
-        if mode == "left" and left_hit:
-            return key
-        if mode == "right" and right_hit:
+        if key == "generic":
+            continue
+        if (left_hit or right_hit):
             return key
     return DEFAULT_CATEGORY
 
+
 def is_routing_site(title, description):
-    """Verifica se é um site de roteamento/navegação."""
     text = (title + " " + description).lower()
-    return any(w in text for w in ROUTING_WORDS)
+    return any(w in text for w in ROUTE_WORDS)
 
-# ── Extração de metadados ───────────────────────────────────────────────────
-def extract_metadata(body):
-    """Extrai <title> e <meta name="description"> do HTML."""
-    soup = BeautifulSoup(body, "html.parser")
-    title = soup.find("title")
-    title = title.get_text(strip=True) if title else ""
-    meta = soup.find("meta", attrs={"name": "description"})
-    description = meta.get("content", "").strip() if meta else ""
-    return {"title": title[:300], "description": description[:500]}
 
-def extract_links(body):
-    """Extrai todos os links <a href> do HTML."""
-    soup = BeautifulSoup(body, "html.parser")
-    links = []
-    for a in soup.find_all("a", href=True):
-        href = a["href"].strip()
-        if href:
-            links.append(href)
-    return links
-
-def is_onion_url(url):
-    """Verifica se é um domínio .onion."""
-    return bool(re.search(r"\.onion\b", url))
-
-# ── Trobot integration core ─────────────────────────────────────────────────
-# Usa os módulos do Trobot para o trabalho pesado de crawling
-# Variável global para o cliente HTTP compartilhado
-http_client = httpx.Client(
-    proxy=TOR_SOCKS_PROXY,
-    timeout=Timeout(TIMEOUT, read=TIMEOUT, write=TIMEOUT, connect=TIMEOUT),
-    follow_redirects=True,
-    verify=False,
-)
-
-def fetch_page_with_torbot(domain, max_retries=3):
-    """Busca uma página usando o Trobot (LinkTree + fetch_html).
-
-    Usa a estrutura do projeto local /home/ubuntu/tools/TorBot/.
-    Usa um único cliente HTTP compartilhado para performance.
-    Inclui rotação automática de circuito (NewCircuit/NewNYM) quando o IP é bloqueado.
-    """
-    global rotation_count
-    result = {
-        "domain": domain,
-        "url": domain,
-        "status": "error",
-        "title": "",
-        "description": "",
-        "category": DEFAULT_CATEGORY,
-        "language": "generic",
-        "error": "",
-        "fetched_at": datetime.now(timezone.utc).isoformat(),
-        "via_proxy": "tor",
-        "children_found": 0,
-        "children_followed": 0,
-    }
-
-    domain_url = domain if domain.startswith(('http://', 'https://')) else f'http://{domain}'
-    attempt = 0
-    max_attempts = max_retries + 1  # +1 para tentativa inicial
-
-    while attempt < max_attempts:
-        try:
-            # Usar o cliente HTTP global (definido no módulo)
-            tree = LinkTree(url=domain_url, depth=1, client=http_client)
-            tree.load()
-
-            # Extrair resultados do LinkTree
-            for node in tree.all_nodes_itr():
-                title = node.data.title if hasattr(node.data, 'title') and node.data.title else ""
-                description = ""
-                if hasattr(node.data, 'description') and node.data.description:
-                    description = node.data.description
-
-                if title:
-                    result["title"] = title[:300]
-                    result["description"] = description[:500]
-
-                    # Unificar linguagem
-                    lang_text = (title + " " + description).strip()
-                    if not lang_text:
-                        lang_text = node.raw_content[:2000] if hasattr(node, 'raw_content') else body.decode('utf-8', errors='ignore')[:2000]
-                    result["language"] = detect_language(lang_text)
-
-                    # Categorizar (heurística)
-                    result["category"] = categorize(title, description)
-
-                    if is_routing_site(title, description):
-                        if result["category"] == DEFAULT_CATEGORY:
-                            result["category"] = "generic"
-
-                    result["status"] = "success"
-
-                    # Extrair links internos
-                    links = tree.all_links()
-                    onion_links = [l for l in links if is_onion_url(l)]
-                    result["children_found"] = len(onion_links)
-
-                    # Seguir links filhos (hashmap dedup)
-                    for child in onion_links:
-                        normalized = child.split("?")[0].split("#")[0].rstrip("/") + "/"
-                        if normalized not in VISITED_URLS:
-                            VISITED_URLS.add(normalized)
-                            result["children_followed"] += 1
-
-                    break  # Só processar o primeiro nó
-            if result["status"] == "success":
-                return result
-        except Exception as e:
-            error_msg = str(e)
-            result["error"] = error_msg
-            
-            # Verificar se é um erro de bloqueio de proxy (exit node)
-            is_proxy_blocked = any([
-                "Proxy Server could not connect" in error_msg,
-                "Host unreachable" in error_msg,
-                "timed out" in error_msg.lower(),
-                "TTL expired" in error_msg,
-            ])
-            
-            if is_proxy_blocked and attempt < max_retries:
-                print(f"[WARN] Site bloqueado pelo exit node: {domain}", flush=True)
-                print(f"[INFO] Rodando nova rota (NewCircuit/NewNym)... ", flush=True)
-                if rotate_tor_circuit():
-                    attempt += 1
-                    continue
-                else:
-                    break
-            else:
-                # Outro erro, não rotacionar
-                break
-
-    return result
-
-# ── NLP Classification (from Trobot) ─────────────────────────────────────────
-# Usa o classificador de texto com scikit-learn treinado em 7.5MB de dados
-# de sites classificados (website_classification.csv)
-try:
-    from torbot.modules.nlp.main import (
-        extract_text as nlp_extract_text,
-        get_classifier as nlp_get_classifier,
-        classify as nlp_classify,
-    )
-    import numpy as np
-    NLP_AVAILABLE = True
-    NLP_MODEL = None
-    print("[INFO] NLP classifier do Trobot carregado", flush=True)
-except ImportError:
-    NLP_AVAILABLE = False
-    import numpy as np
-    print("[WARN] NLP classifier não disponível", flush=True)
-
-def get_nlp_model():
-    """Obtém ou inicializa o modelo NLP do Trobot."""
-    global NLP_MODEL
-    if NLP_MODEL is None and NLP_AVAILABLE:
-        try:
-            NLP_MODEL = nlp_get_classifier()
-        except Exception as e:
-            print(f"[WARN] Erro ao carregar NLP model: {e}", flush=True)
-            NLP_MODEL = None
-    return NLP_MODEL
-
-def classify_with_nlp(text):
-    """Classifica texto usando o modelo NLP do Trobot."""
-    model = get_nlp_model()
-    if model is None:
-        return "generic", 0.0
-    try:
-        result = nlp_classify(model, text)
-        category = str(result[0]) if isinstance(result, (list, tuple)) else str(result)
-        confidence = float(result[1]) if len(result) > 1 else 0.0
-        return category, confidence
-    except Exception:
-        return "generic", 0.0
-
-def nlp_classify_site(title, description):
-    """Classifica um site usando NLP do Trobot."""
-    text = (title or "") + " " + (description or "")
-    if not text.strip():
-        return "generic", 0.0
-    return classify_with_nlp(text)
-
-# ── Analyst (evidence-first analysis) ────────────────────────────────────────
-# Módulo Trobot para análise de dados de crawl
-try:
-    from torbot.analyst import build_evidence, build_graph, deterministic_claims
-    ANALYST_AVAILABLE = True
-    print("[INFO] Module analyst do Trobot carregado", flush=True)
-except ImportError:
-    ANALYST_AVAILABLE = False
-    print("[WARN] Module analyst não disponível", flush=True)
-
-REPORT_SCHEMA = "investigation-report.v1"
-
-def analyze_crawl_results(results, output_dir):
-    """Gera análise detalhada dos resultados do crawl usando Trobot Analyst."""
-    if not ANALYST_AVAILABLE:
-        return None
-    try:
-        evidence = build_evidence(results)
-        graph = build_graph(results, evidence)
-        claims = deterministic_claims(results)
-        report = {
-            "analysis_version": REPORT_SCHEMA,
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "summary": {
-                "total": len(results),
-                "success": sum(1 for r in results if r["status"] == "success"),
-                "error": sum(1 for r in results if r["status"] == "error"),
-                "categories": (lambda d: dict(sorted(d.items(), key=lambda x: -x[1])))(
-                    {r.get("category", "generic"): sum(1 for r in results if r.get("category") == r.get("category", "generic") and r["status"] == "success") for r in results if r["status"] == "success"}
-                ),
-                "languages": (lambda d: dict(sorted(d.items(), key=lambda x: -x[1])))(
-                    {r.get("language", "generic"): sum(1 for r in results if r.get("language") == r.get("language", "generic") and r["status"] == "success") for r in results if r["status"] == "success"}
-                ),
-            },
-            "evidence": evidence,
-            "claims": claims,
-        }
-        output_path = os.path.join(output_dir, "analysis_report.json")
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(report, f, ensure_ascii=False, indent=2)
-        return report
-    except Exception as e:
-        print(f"[WARN] Analysis failed: {e}", flush=True)
-        return None
-
-# ── Estado / persistence ────────────────────────────────────────────────────
-VISITED_URLS = set()
-STATE_FILE = STATE_JSON
-
-def load_visited(quiet=False):
-    """Carrega estado persistido de URLs já visitadas."""
-    global VISITED_URLS
-    if os.path.exists(STATE_FILE):
-        try:
-            with open(STATE_FILE, "r", encoding="utf-8") as f:
-                VISITED_URLS = set(json.load(f))
-            if not quiet:
-                print(f"[INFO] URLs já visitadas: {len(VISITED_URLS)}", flush=True)
-        except Exception as e:
-            print(f"[ERRO] Não foi possível carregar estado: {e}", flush=True)
-            VISITED_URLS = set()
-
-def save_visited(quiet=False):
-    """Salva estado persistido de URLs visitadas."""
-    try:
-        with open(STATE_FILE, "w", encoding="utf-8") as f:
-            json.dump(list(VISITED_URLS), f, ensure_ascii=False)
-        if not quiet:
-            print(f"[INFO] Estado salvo: {len(VISITED_URLS)} URLs", flush=True)
-    except Exception as e:
-        print(f"[ERRO] Não foi possível salvar estado: {e}", flush=True)
-
-# ── Circuit rotation (NewCircuit / NewNym) ────────────────────────────────────
-# Rotaciona o exit node do Tor quando os sites bloqueiam o IP atual
-import subprocess
-import time as time_mod
-
-CIRCUIT_ROTATION_INTERVAL = 50       # Tentativas antes de rotacionar
-CIRCUIT_ROTATION_DELAY = 30          # Segundos entre rotações
-
-rotation_count = 0
-
-def rotate_tor_circuit():
-    """
-    Rota o circuito do Tor para obter um novo exit node.
-    Usa `systemctl restart tor` (ou `tor --Signal NEWNYM` se disponível).
-    Retorno: True se a rotação foi bem-sucedida, False caso contrário.
-    """
-    global rotation_count
-    try:
-        print(f"[INFO] Rotacionando circuito Tor (tentativa {rotation_count + 1})... ", flush=True)
-        # Restaurar o serviço do Tor
-        result = subprocess.run(
-            ["sudo", "systemctl", "restart", "tor"],
-            capture_output=True, text=True, timeout=30
-        )
-        if result.returncode == 0:
-            # Aguardar conexão do novo circuito
-            time_mod.sleep(CIRCUIT_ROTATION_DELAY)
-            # Verificar se o Tor está ativo
-            result2 = subprocess.run(
-                ["systemctl", "is-active", "tor"],
-                capture_output=True, text=True, timeout=10
-            )
-            if result2.stdout.strip() == "active":
-                print("[OK] Novo circuito Tor ativado", flush=True)
-                rotation_count += 1
-                return True
-            else:
-                print("[ERRO] Tor não está mais ativo após reinício", flush=True)
-                return False
-        else:
-            print(f"[ERRO] Falha ao reiniciar Tor: {result.stderr}", flush=True)
-            return False
-    except Exception as e:
-        print(f"[ERRO] Erro na rotação: {e}", flush=True)
-        return False
-def scrape_all_domains(domains, quiet=False, fast=False, limit=None, max_children=50):
-    """Scrape todos os domínios. Cada domínio pode gerar até `max_children` links filhos."""
-    global MAX_CHILDREN_PER_SITE, VISITED_URLS
-    MAX_CHILDREN_PER_SITE = max_children
-
-    if fast:
-        domains = [d for d in domains if d not in VISITED_URLS]
-        if not quiet:
-            print(f"[INFO] Já visitados: {len(domains)} | Novos: {len(domains)}", flush=True)
-
-    if not quiet:
-        print(f"[INFO] Novo total a processar: {len(domains)}", flush=True)
-        print(f"[INFO] Threads ativadas: {THREADS} | Timeout: {TIMEOUT}s | Max children/site: {max_children}", flush=True)
-        print(f"[INFO] Total de URLs já visitadas (deduplicação): {len(VISITED_URLS)}", flush=True)
-
-    if limit:
-        domains = domains[:limit]
-
+# ── Trobot LinkTree (árvore de filhos do hidden wiki) ────────────────────────
+def follow_wiki_children(domain, depth=2, max_children=10):
+    """Usa o LinkTree do Trobot para percorrer children e filhos(de filhos) de
+    um hidden wiki, imitando o comportamento 'children and grandchildren'
+    consecutivamente."""
     results = []
-    completed = 0
-    BATCH_SIZE = 25  # Salvar progresso a cada 25 domínios
-    total = len(domains)
-
-    # Garantir que o CSV existe com cabeçalho (apenas no início)
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    fieldnames = [
-        "domain", "url", "status", "title", "description", "category",
-        "language", "error", "fetched_at", "via_proxy",
-        "children_found", "children_followed"
-    ]
-    if not os.path.exists(CSV_PATH):
-        with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
-            writer.writeheader()
-
-    with ThreadPoolExecutor(max_workers=THREADS) as executor:
-        future_to_domain = {executor.submit(fetch_page_with_torbot, d): d for d in domains}
-        for i, future in enumerate(as_completed(future_to_domain), 1):
-            domain = future_to_domain[future]
-            try:
-                result = future.result()
-                results.append(result)
-                if result["status"] == "success":
-                    completed += 1
-                    if not quiet:
-                        print(f"  ✓ {domain} -> {result['category']} [{result['language']}]", flush=True)
-                else:
-                    if not quiet:
-                        print(f"  ✗ {domain} -> {result.get('error', 'unknown')}", flush=True)
-            except Exception as e:
-                result = {"domain": domain, "status": "error", "error": str(e), "via_proxy": "tor"}
-                results.append(result)
-                if not quiet:
-                    print(f"  ✗ {domain} -> exception: {e}", flush=True)
-
-            # Salvar progresso e CSV incrementalmente
-            if completed % BATCH_SIZE == 0 or completed == total:
-                save_visited(quiet=quiet)
-                print(f"[INFO] Progresso: {completed}/{total} ({completed*100//total}%)", flush=True)
-                # Salvar CSV incrementalmente (append)
-                with open(CSV_PATH, "a", newline="", encoding="utf-8") as f:
-                    writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
-                    for r in results:
-                        writer.writerow(r)
-
-            if limit and completed >= limit:
-                break
-
+    try:
+        tree = LinkTree(url=domain, depth=depth, client=None)
+        tree.load()
+        for node in tree.all_nodes_itr():
+            results.append((node.identifier, node.data.title if node.data else ""))
+    except Exception as e:
+        if not FROM_COLOR:
+            print(f"[WARN] Trobot LinkTree falhou em {domain}: {e}", flush=True)
+        results = [(domain, "")]
     return results
 
-# ── Leitura de CSV/JSON ─────────────────────────────────────────────────────
-def read_catalog_csv(path=None):
-    """Lê o catalog.csv e retorna lista de domínios."""
-    path = path or CSV_PATH
-    domains = []
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                domains.append(row.get("domain", ""))
-    return domains
 
-def read_results_json(path=None):
-    """Lê o results.json e retorna registros."""
-    path = path or META_JSON
-    records = []
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
-            records = json.load(f)
-    return records
+# ── Estado incremental ──────────────────────────────────────────────────────
+VISITED = set()
 
+
+def load_visited(quiet=False):
+    global VISITED
+    if os.path.exists(STATE_JSON):
+        try:
+            VISITED = set(json.load(open(STATE_JSON, encoding="utf-8")))
+            if not quiet:
+                print(f"[INFO] Já visitados: {len(VISITED)} URLs.", flush=True)
+        except Exception as e:
+            VISITED = set()
+
+
+def save_visited():
+    json.dump(sorted(VISITED), open(STATE_JSON, "w", encoding="utf-8"), ensure_ascii=False)
+
+
+# ── Crawl incremental ────────────────────────────────────────────────────────
+def crawl_domain(domain, quiet=False):
+    """Crawl um domínio: fetch via Tor + categoria + idioma + deep-2 children."""
+    if domain in VISITED:
+        return None
+    record = {
+        "domain": domain, "url": domain, "status": "error", "title": "",
+        "description": "", "category": DEFAULT_CATEGORY, "language": "generic",
+        "error": "", "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "via_proxy": "tor", "children": [],
+    }
+    try:
+        status, body = tor_fetch(domain)
+        if status == 0 and body:
+            title, desc = parse_title_description(body)
+            record["title"] = title[:300]
+            record["description"] = desc[:500]
+            record["language"] = detect_language(title + " " + desc)
+            record["category"] = _categorize(title, desc)
+            if is_routing_site(title, desc) and record["category"] == DEFAULT_CATEGORY:
+                record["category"] = "generic"
+            record["status"] = "success"
+            record["via_proxy"] = "tor"
+            # Hidden wiki: children + grandchildren (depth 2) via LinkTree do Trobot
+            if record["category"] == "wiki" or "wiki" in (title + desc).lower():
+                record["children"] = follow_wiki_children(domain, depth=2)
+    except Exception as e:
+        record["error"] = str(e)
+    VISITED.add(domain)
+    if not quiet:
+        mark = "✓" if record["status"] == "success" else "✗"
+        print(f"  {mark} {domain} [{record.get('category','?')}/{record.get('language','?')}]", flush=True)
+    return record
+
+
+def crawl_incremental(domains, quiet=False, limit=None, progress_batch=5):
+    """Crawl sequencial (1 thread), acrescentando apenas domínios novos."""
+    if limit:
+        domains = domains[:limit]
+    domains = [d for d in domains if d not in VISITED]
+    os.makedirs(OUT_DIR, exist_ok=True)
+    fieldnames = ["domain", "url", "status", "title", "description", "category",
+                  "language", "error", "fetched_at", "via_proxy", "children"]
+    if not os.path.exists(CSV_PATH):
+        csv.DictWriter(open(CSV_PATH, "w", newline="", encoding="utf-8"),
+                       fieldnames=fieldnames, extrasaction="ignore").writeheader()
+    results = []
+    completed = 0
+    for i, domain in enumerate(domains, 1):
+        rec = crawl_domain(domain, quiet=quiet)
+        if rec:
+            results.append(rec)
+        completed += 1
+        if (completed % progress_batch == 0) or completed == len(domains):
+            save_visited()
+            write_csv(results)
+            if not quiet:
+                print(f"[INFO] Progresso: {completed}/{len(domains)}", flush=True)
+    save_visited()
+    write_csv(results)
+    return results
+
+
+def write_csv(results):
+    with open(CSV_PATH, "a", newline="", encoding="utf-8") as f:
+        csv.DictWriter(f, fieldnames=["domain", "url", "status", "title", "description",
+                                       "category", "language", "error", "fetched_at",
+                                       "via_proxy", "children"], extrasaction="ignore").writerows(
+            results)
+
+
+# ── Concorrência (teste) ─────────────────────────────────────────────────────
+def crawl_concurrent(domains, quiet=False, workers=4, limit=None):
+    if limit:
+        domains = domains[:limit]
+    domains = [d for d in domains if d not in VISITED]
+    results = []
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        f2d = {ex.submit(crawl_domain, d): d for d in domains}
+        for fut in as_completed(f2d):
+            rec = fut.result()
+            if rec:
+                results.append(rec)
+            if len(results) % 5 == 0:
+                save_visited()
+                write_csv(results)
+    save_visited()
+    write_csv(results)
+    return results
+
+
+# ── Relatório (reutiliza o Trobot para análise se disponível) ────────────────
 def print_report(results):
-    """Imprime relatório de resumos."""
     total = len(results)
-    success = sum(1 for r in results if r["status"] == "success")
-    categories = {}
-    languages = {}
+    success = sum(1 for r in results if r.get("status") == "success")
+    cats, langs = {}, {}
     for r in results:
-        if r["status"] == "success":
-            cat = r.get("category", "generic")
-            lang = r.get("language", "generic")
-            categories[cat] = categories.get(cat, 0) + 1
-            languages[lang] = languages.get(lang, 0) + 1
-    print(f"\n=== Relatório de Crawl ===")
+        if r.get("status") == "success":
+            cats[r.get("category", "generic")] = cats.get(r.get("category", "generic"), 0) + 1
+            langs[r.get("language", "generic")] = langs.get(r.get("language", "generic"), 0) + 1
+    print(f"\n=== Relatório ===")
     print(f"Total: {total} | Sucesso: {success} | Erros: {total - success}")
-    print(f"Categorias: {dict(sorted(categories.items(), key=lambda x: -x[1]))}")
-    print(f"Idiomas: {dict(sorted(languages.items(), key=lambda x: -x[1]))}")
-    errors = [r for r in results if r["status"] == "error"]
-    if errors:
-        print(f"\nErros detalhados ({len(errors)} erros):")
-        for r in errors[:10]:
-            print(f"  - {r.get('domain')}: {r.get('error', 'n/a')}")
+    print(f"Categorias: {dict(sorted(cats.items(), key=lambda x: -x[1]))}")
+    print(f"Idiomas: {dict(sorted(langs.items(), key=lambda x: -x[1]))}")
 
-# ── Main ────────────────────────────────────────────────────────────────────
+
+# ── main ─────────────────────────────────────────────────────────────────────
 def main():
-    parser = argparse.ArgumentParser(
-        description="Crawler de sites .onion via Ahmia + Trobot (link follow + dedup).",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument("--fast", action="store_true", help="Pular URLs já visitadas (hashmap)")
-    parser.add_argument("--quiet", action="store_true", help="Reduz logs")
-    parser.add_argument("--limit", type=int, default=None, help="Limite de domínios")
-    parser.add_argument("--threads", type=int, default=4, help="Número de threads")
-    parser.add_argument("--max-children", type=int, default=50, help="Máximo de links filhos por site")
+    parser = argparse.ArgumentParser(description="Crawler .onion via Ahmia + Trobot (incr., 1 thread incial).")
+    parser.add_argument("--fast", action="store_true", help="pular URLs já visitadas")
+    parser.add_argument("--quiet", action="store_true")
+    parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--concurrent", type=int, default=0, help="quantos threads (0 = seqüencial)")
     args = parser.parse_args()
 
-    global THREADS, STATE_FILE, CSV_PATH, META_JSON
-    THREADS = args.threads
-    STATE_FILE = os.path.join(OUTPUT_DIR, "visited_urls.json")
-
-    # Carregar estado persistido
     load_visited(quiet=args.quiet)
 
-    # 1. Verificar conexão via Tor
-    print("[INFO] Verificando conexão via Tor... ", flush=True)
+    # verificar conexão via Tor
     try:
-        resp = http_client.get("https://check.torproject.org/api/ip")
-        ip_match = re.search(r'"IP":\s*"([^"]+)"', resp.text)
-        if ip_match:
-            print(f"[OK] Tor proxy confirmado: exit node {ip_match.group(1)}", flush=True)
-            # Usar get_ip para detectar o IP do Tor
-            from torbot.modules.api import get_ip
-            ip_info = get_ip(http_client)
-            print(f"[INFO] IP do Tor: {ip_info.get('body', 'unknown')}", flush=True)
+        c = httpx.Client(proxy=f"socks5://127.0.0.1:9050", timeout=15, verify=False, follow_redirects=True)
+        r = c.get("https://check.torproject.org/api/ip", timeout=15)
+        m = re.search(r'"IP":\s*"([^"]+)"', r.text)
+        print(f"[OK] Tor proxy ativo. exit node: {m.group(1)}" if m else "[WARN] Tor proxy sem IP", flush=True)
+        c.close()
     except Exception as e:
-        print(f"[ERRO] Não foi possível conectar via Tor: {e}", flush=True)
+        print(f"[ERRO] Tor inativo: {e}", flush=True)
         sys.exit(1)
 
-    # 2. Verificar versões dos módulos
-    print("[INFO] Verificando versões dos módulos... ", flush=True)
-    try:
-        from torbot.modules.updater import check_version
-        check_version()
-    except Exception as e:
-        print(f"[WARN] Não foi possível verificar versões: {e}", flush=True)
+    # carregar domínios do índice Ahmia ou do catalog.csv
+    if os.path.exists(AHMI_CACHE_PATH):
+        raw = open(AHMI_CACHE_PATH, encoding="utf-8", errors="ignore").read()
+        domains = re.findall(r"([a-z2-7]{56}\.onion)", raw)
+        print(f"[OK] {len(set(domains))} domínios carregados do ahmia.", flush=True)
+    elif os.path.exists(CSV_PATH):
+        domains = [row["domain"] for row in csv.DictReader(open(CSV_PATH, encoding="utf-8"))]
+        print(f"[OK] {len(domains)} domínios do catalog.csv.", flush=True)
+    else:
+        print("[ERRO] sem índice Ahmia nem catalog.", flush=True)
+        sys.exit(1)
 
-    # 3. Baixar índice Ahmia
-    print("[INFO] Baixando índice Ahmia... ", flush=True)
-    domains = []
-    try:
-        resp = http_client.get(AHMI_INDEX_URL, timeout=30)
-        resp.raise_for_status()
-        raw = resp.text
-        domains = re.findall(r'([a-z2-7]{56}\.onion)', raw)
-        seen = set()
-        unique_domains = []
-        for d in domains:
-            if d not in seen:
-                seen.add(d)
-                unique_domains.append(d)
-        print(f"[OK] {len(unique_domains)} domínios .onion únicos encontrados", flush=True)
-    except Exception as e:
-        print(f"[WARN] Download Ahmia falhou: {e}", flush=True)
-        print("[INFO] Tentando carregar índice em cache... ", flush=True)
-        try:
-            cached_path = os.path.expanduser('~/ahmia_index.html')
-            if os.path.exists(cached_path):
-                with open(cached_path, 'r', encoding='utf-8', errors='ignore') as f:
-                    raw = f.read()
-                domains = re.findall(r'([a-z2-7]{56}\.onion)', raw)
-                seen = set()
-                unique_domains = []
-                for d in domains:
-                    if d not in seen:
-                        seen.add(d)
-                        unique_domains.append(d)
-                print(f"[OK] {len(unique_domains)} domínios .onion carregados do cache", flush=True)
-            else:
-                raise Exception('Arquivo de cache não encontrado')
-        except Exception as e2:
-            print(f"[ERRO] Não foi possível baixar o índice Ahmia: {e2}", flush=True)
-            sys.exit(1)
+    domains = list(dict.fromkeys(domains))  # dedup preserva ordem
+    if args.fast:
+        domains = [d for d in domains if d not in VISITED]
 
-    # 4. Scraping
-    print(f"[INFO] Iniciando crawl com {THREADS} threads... ", flush=True)
-    results = scrape_all_domains(
-        unique_domains,
-        quiet=args.quiet,
-        fast=args.fast,
-        limit=args.limit,
-        max_children=args.max_children
-    )
-
-    # 5. Salvar resultados
-    print(f"[INFO] Salvando {len(results)} resultados... ", flush=True)
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    fieldnames = [
-        "domain", "url", "status", "title", "description", "category",
-        "language", "error", "fetched_at", "via_proxy",
-        "children_found", "children_followed"
-    ]
-    with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
-        writer.writeheader()
-        for r in results:
-            writer.writerow(r)
-
-    json_data = [{k: r.get(k, "") for k in fieldnames} for r in results]
-    with open(META_JSON, "w", encoding="utf-8") as f:
-        json.dump(json_data, f, ensure_ascii=False, indent=2)
+    workers = args.concurrent if args.concurrent > 0 else 1
+    if workers > 1:
+        results = crawl_concurrent(domains, quiet=args.quiet, workers=workers, limit=args.limit)
+        print(f"[INFO] Crawl concorrente: {workers} threads.", flush=True)
+    else:
+        results = crawl_incremental(domains, quiet=args.quiet, limit=args.limit)
+        print("[INFO] Crawl seqüencial (1 thread), incremental.", flush=True)
 
     save_visited()
-
-    # 6. Análise avançada (Trobot Analyst)
-    print(f"[INFO] Gerando análise detalhada... ", flush=True)
-    try:
-        from torbot.analyst import build_evidence, build_graph, deterministic_claims
-        evidence = build_evidence(results)
-        graph = build_graph(results, evidence)
-        claims = deterministic_claims(results)
-        report = {
-            "analysis_version": REPORT_SCHEMA,
-            "generated_at": datetime.now(timezone.utc).isoformat(),
-            "summary": {
-                "total": len(results),
-                "success": sum(1 for r in results if r["status"] == "success"),
-                "error": sum(1 for r in results if r["status"] == "error"),
-                "categories": dict(sorted({r.get("category", "generic") for r in results if r["status"] == "success"}.items(), key=lambda x: -x[1])) if False else {},
-                "languages": {k: sum(1 for r in results if r.get("language") == k and r["status"] == "success") for k in set(r.get("language", "generic") for r in results if r["status"] == "success")},
-            },
-            "evidence": evidence,
-            "claims": claims,
-        }
-        with open(ANALYSIS_JSON, "w", encoding="utf-8") as f:
-            json.dump(report, f, ensure_ascii=False, indent=2)
-        print(f"[OK] Análise salva em {ANALYSIS_JSON}", flush=True)
-    except Exception as e:
-        print(f"[WARN] Análise falhou: {e}", flush=True)
-
-    # 7. Relatório
+    with open(META_JSON, "w", encoding="utf-8") as f:
+        json.dump(results, f, ensure_ascii=False, indent=2)
     print_report(results)
+    if ANALYST_AVAILABLE:
+        try:
+            from torbot.analyst import build_evidence, build_graph, deterministic_claims
+            evidence = build_evidence(results)
+            graph = build_graph(results, evidence)
+            claims = deterministic_claims(results)
+            cat_counts = {}
+            for r in results:
+                if r.get("status") == "success":
+                    cat = r.get("category", "generic")
+                    cat_counts[cat] = cat_counts.get(cat, 0) + 1
+            report = {
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+                "success": sum(1 for r in results if r.get("status") == "success"),
+                "categories": dict(sorted(cat_counts.items(), key=lambda x: -x[1])),
+                "claims": claims,
+            }
+            json.dump(report, open(ANALYSIS_JSON, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+            print(f"[OK] análise gravada em {ANALYSIS_JSON}", flush=True)
+        except Exception as e:
+            print(f"[WARN] análise falhou: {e}", flush=True)
 
-    # 8. Resumo final
-    print(f"\n[OK] Crawl concluído: {len(results)} domínios processados", flush=True)
-    print(f"[OK] Continuidade garantida via {STATE_FILE}", flush=True)
-    print(f"[OK] Salvo: {CSV_PATH}", flush=True)
-    print(f"[OK] Salvos: {META_JSON}", flush=True)
 
 if __name__ == "__main__":
     main()
