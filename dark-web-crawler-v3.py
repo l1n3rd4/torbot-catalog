@@ -77,7 +77,7 @@ CSV_PATH = os.path.join(OUT_DIR, "catalog.csv")
 META_JSON = os.path.join(OUT_DIR, "results.json")
 STATE_JSON = os.path.join(OUT_DIR, "visited_urls.json")
 ANALYSIS_JSON = os.path.join(OUT_DIR, "analysis_report.json")
-TIMEOUT = 15
+TIMEOUT = 40
 REQUEST_DELAY = 0.8
 DEFAULT_CATEGORY = "generic"
 AHMI_CACHE_PATH = os.path.expanduser("~/ahmia_index.html")
@@ -96,7 +96,7 @@ ROUTE_WORDS = ["index", "home", "login", "register", "sign", "status", "about", 
 
 
 # ── Fetch via túnel SOCKS5 (coração da correção) ─────────────────────────────
-def _socks5_connect(host, port=443, timeout=15):
+def _socks5_connect(host, port=443, timeout=40):
     """Conecta ao Tor SOCKS5 como o curl --socks5-hostname.
 
     Handshake: [5,2,0,2] -> [5,2] (servidor seleciona auth) -> [5,2,0,0,0,0]
@@ -130,7 +130,7 @@ def _socks5_connect(host, port=443, timeout=15):
         raise
 
 
-def tor_fetch(url, retries=3):
+def tor_fetch(url, retries=1):
     """Obtém o HTML de um .onion/URL via Tor, igual ao curl --socks5-hostname.
 
     Retorna ``(status, html_bytes)``. Em caso de falha (Tor instável),
@@ -162,12 +162,13 @@ def tor_fetch(url, retries=3):
             last_err = e
             time.sleep(REQUEST_DELAY * (attempt + 1))
     # fallback provado: executa o curl equivalente
-    cmd = ["curl", "--socks5-hostname", "127.0.0.1:9050", "-L", "--max-time", str(TIMEOUT), url]
+    cmd = ["curl", "--socks5-hostname", "127.0.0.1:9050", "-sS", "-L", "--max-time", str(TIMEOUT), url]
     try:
         r = subprocess.run(cmd, capture_output=True, timeout=TIMEOUT + 5)
-        return (r.returncode, r.stdout)
+        err = r.stderr.decode("utf-8", errors="ignore").strip()
+        return (r.returncode, r.stdout, err)
     except Exception as e2:
-        return (-1, ("fallback-failed: %s; raw: %s" % (e2, last_err)).encode())
+        return (-1, ("fallback-failed: %s; raw: %s" % (e2, last_err)).encode(), "")
 
 
 def parse_title_description(html_bytes):
@@ -288,7 +289,7 @@ def crawl_domain(domain, quiet=False):
         "via_proxy": "tor", "children": [],
     }
     try:
-        status, body = tor_fetch(domain)
+        status, body, err = tor_fetch(domain)
         if status == 0 and body:
             title, desc = parse_title_description(body)
             record["title"] = title[:300]
@@ -302,6 +303,9 @@ def crawl_domain(domain, quiet=False):
             # Hidden wiki: children + grandchildren (depth 2) via LinkTree do Trobot
             if record["category"] == "wiki" or "wiki" in (title + desc).lower():
                 record["children"] = follow_wiki_children(domain, depth=2)
+        else:
+            record["status"] = "error"
+            record["error"] = err or ("curl exit code %d, empty body" % status)
     except Exception as e:
         record["error"] = str(e)
     VISITED.add(domain)
@@ -324,6 +328,7 @@ def crawl_incremental(domains, quiet=False, limit=None, progress_batch=5):
                        fieldnames=fieldnames, extrasaction="ignore").writeheader()
     results = []
     completed = 0
+    written = 0
     for i, domain in enumerate(domains, 1):
         rec = crawl_domain(domain, quiet=quiet)
         if rec:
@@ -331,20 +336,26 @@ def crawl_incremental(domains, quiet=False, limit=None, progress_batch=5):
         completed += 1
         if (completed % progress_batch == 0) or completed == len(domains):
             save_visited()
-            write_csv(results)
+            write_csv(results, offset=written)
+            written = len(results)
             if not quiet:
                 print(f"[INFO] Progresso: {completed}/{len(domains)}", flush=True)
     save_visited()
-    write_csv(results)
+    if written < len(results):
+        write_csv(results, offset=written)
     return results
 
 
-def write_csv(results):
+def write_csv(rows, offset=0):
+    """Anexa linhas ao CSV, ignorando as já salvas (offset)."""
+    rows = rows[offset:]
+    if not rows:
+        return
     with open(CSV_PATH, "a", newline="", encoding="utf-8") as f:
         csv.DictWriter(f, fieldnames=["domain", "url", "status", "title", "description",
                                        "category", "language", "error", "fetched_at",
                                        "via_proxy", "children"], extrasaction="ignore").writerows(
-            results)
+            rows)
 
 
 # ── Concorrência (teste) ─────────────────────────────────────────────────────
@@ -353,6 +364,7 @@ def crawl_concurrent(domains, quiet=False, workers=4, limit=None):
         domains = domains[:limit]
     domains = [d for d in domains if d not in VISITED]
     results = []
+    written = 0
     with ThreadPoolExecutor(max_workers=workers) as ex:
         f2d = {ex.submit(crawl_domain, d): d for d in domains}
         for fut in as_completed(f2d):
@@ -361,9 +373,11 @@ def crawl_concurrent(domains, quiet=False, workers=4, limit=None):
                 results.append(rec)
             if len(results) % 5 == 0:
                 save_visited()
-                write_csv(results)
+                write_csv(results, offset=written)
+                written = len(results)
     save_visited()
-    write_csv(results)
+    if written < len(results):
+        write_csv(results, offset=written)
     return results
 
 
@@ -395,8 +409,8 @@ def main():
 
     # verificar conexão via Tor
     try:
-        c = httpx.Client(proxy=f"socks5://127.0.0.1:9050", timeout=15, verify=False, follow_redirects=True)
-        r = c.get("https://check.torproject.org/api/ip", timeout=15)
+        c = httpx.Client(proxy=f"socks5://127.0.0.1:9050", timeout=40, verify=False, follow_redirects=True)
+        r = c.get("https://check.torproject.org/api/ip", timeout=40)
         m = re.search(r'"IP":\s*"([^"]+)"', r.text)
         print(f"[OK] Tor proxy ativo. exit node: {m.group(1)}" if m else "[WARN] Tor proxy sem IP", flush=True)
         c.close()

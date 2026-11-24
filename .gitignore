@@ -7,10 +7,6 @@ __pycache__/
 .env
 .env.lock
 
-# Runtime crawler outputs (regenerável ou volátil)
-visited_urls.json
-results.json
-
 # OS
-.DS_Store
+.DS.Store
 Thumbs.db
