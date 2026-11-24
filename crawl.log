@@ -8221,3 +8221,731 @@ WARNING:root:Skipping URL k2htee64gyxc4zm7ssrd57zz4t5rbm2rhu4cdpfhdh7y4bkmmft7id
   ✓ k7dyt6gcr7bvytefr2uksfbumtpyiiolih55i4hzvvxdfl6rrndrarid.onion [generic/generic]
   ✓ k3mvr6xn73svaj7nuzqp3ca6t2wpfsyg3yrfeudsbwhxd2hmaqev7cyd.onion [marketplace/en]
   ✓ ka6n6npqxdk243ncrefuezozchb5rf3hqwm2fgtdmhwvcv7ognqfqjid.onion [generic/generic]
+  ✓ kanechatzrsipnvtptt2nf4vydnhjmuyaa5izrwlzinxi2dynm7fjyqd.onion [chat/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 20 | Erros: 5
+Categorias: {'generic': 8, 'marketplace': 5, 'streaming': 4, 'chat': 2, 'wiki': 1}
+Idiomas: {'en': 14, 'generic': 5, 'pt': 1}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5770 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.112
+[OK] 11433 domínios carregados do ahmia.
+  ✓ kawaiientmjfx4hjvwyjl2owa3pvrncsaotbws2ichnhh76uxd3yhbyd.onion [chat/pt]
+  ✓ kazaktdephfyxeagjm4yemtgzsciy4n535rwow7dipp2xeovrmreq5qd.onion [chat/en]
+  ✓ kaoi7rgslx6uvigblq6rafobw3u5mjfjugey3o4w5sx65br4fon5c2yd.onion [streaming/en]
+  ✓ karavxev5z2jixtfotahlf4gii7n2cp7o3vmkm3k36uq5xuibyjemxyd.onion [generic/en]
+  ✓ kb22la4ugqoyybzdtcht6gcblbyo6su3r4h3g56ovymugz2nwasm6nid.onion [chat/en]
+  ✓ kbfacantlcefzif3c7qgntvfn6slwhcdafgkdmnr6jng3gd2uuwhfxqd.onion [generic/generic]
+  ✓ kc2gnymfg36cj24xqon5kpppgrd74pop3fgumtv3vk4akutr57mtepqd.onion [chat/generic]
+WARNING:root:Skipping URL kbzwtllnzfgnayk5vax7vwtdekekkaface4lvz74fzfd5bzq5qxa2lqd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ kbzwtllnzfgnayk5vax7vwtdekekkaface4lvz74fzfd5bzq5qxa2lqd.onion [wiki/en]
+  ✓ kc7tuqjqberwt6f6ofxjkipg4eqpfpe23hdfhxccp3syyggeuiskyoyd.onion [marketplace/generic]
+WARNING:root:Skipping URL kcfz5m3ipji262swznq2ybir3m4b5wwwd7zckhfashp6cuuwyr6ovnyd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ kcfz5m3ipji262swznq2ybir3m4b5wwwd7zckhfashp6cuuwyr6ovnyd.onion [wiki/en]
+  ✓ kcn476k7jxzcbkobgb2xjfospodpwnjrpqailjjqg4q2uq5juiiwy5id.onion [streaming/en]
+  ✓ kcnsms3p3g5id46577bwga4sg7bggj6gzjktxlnabdrk5vbsuljwq6qd.onion [chat/generic]
+  ✗ kciz433ymzkillkcg7oa3grtlruk4eudkpuo4kr2iemskck5xzlc62ad.onion [generic/generic]
+  ✓ kcz2hwttj5o4hjxy46fk4alk3w6upureycqd4wctyte43qzy56l4dnqd.onion [marketplace/en]
+  ✓ kd7x3pt2rv66ktxds4spweyfzn55a525fkbor2wtnmaxdpt6gz2cabad.onion [marketplace/en]
+  ✓ kd6oox7aowzt5ypwdp2o5curwkgtjjzzk33ecejomm52epjr74daoeid.onion [streaming/en]
+  ✓ kdc7ohu7fac6swyaz3by5oqyo363y3773w7b65blco63ohpzsioil4qd.onion [chat/en]
+  ✓ kdnzaxon4by6723mgmqmzjoscqwz4qnh4udivfoprdnydbzlg2ed2uqd.onion [generic/generic]
+  ✓ keendaz6lwwzwijef7x3ssvibudbdag2mr6xptzj3pvhof44ivipltad.onion [streaming/generic]
+  ✓ kemldgom3jujt32isp5nra5kl6b47xkd65o5axp5x7ulqj4x4eqnz2ad.onion [marketplace/en]
+  ✓ kenya4vztv3nxum7vihhcunn3rn7qjcffi3tfea6rvdycn2fml7w6rqd.onion [chat/en]
+  ✓ ketam3byjt56lnrjqpy6owtzzsntythwyzfyx5ifr4vhbc3s5xn3soad.onion [chat/en]
+  ✓ ketam776w7wvqyoawgk3lwckmz7doer4lwcnrynd5372oo7pcb6lepid.onion [generic/en]
+  ✓ kerberucs7t5egzqwcholswggilgzxaj54bjogppvqoddk4xqliw73qd.onion [chat/en]
+  ✓ kdq4wrfzc6ap4toahexmldhb6xwaticn5wlmpbx54vqas2lybybndsid.onion [generic/en]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 24 | Erros: 1
+Categorias: {'chat': 9, 'generic': 5, 'streaming': 4, 'marketplace': 4, 'wiki': 2}
+Idiomas: {'en': 17, 'generic': 6, 'pt': 1}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5795 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.112
+[OK] 11433 domínios carregados do ahmia.
+  ✓ ketamagjgh5cbmvhclcl6mwjpdamrtirvkpzbsd7zeqapurpk7svhsqd.onion [generic/en]
+  ✓ ketamyicaiepmm2s22jb3niuudlcafdvvkhtuozb7uypu7rvawbi7xyd.onion [marketplace/generic]
+  ✓ ketampryjugfz3vm2qez55z2xsfo3z7ish6weedynsrhc7rbnxrzs4id.onion [generic/en]
+  ✓ ketameicinazuukwx2uc6w4rwfb2iw3n4et7ak4pqbbdes7cco7d3uqd.onion [generic/en]
+  ✓ keynjuh4gynoc2wcfoxhjabsvq7sbh7anienwbvv3ewu43qkfn5sgsid.onion [generic/en]
+  ✓ keyhhmywqffqbdeqlk2cn54ympyric6zkgq4ibc7costfq3srivctqid.onion [marketplace/en]
+  ✓ keypzhp4sscfb72pvyz2bcfc3vr7y2r3v3mhtpag2aliwvddo2mzdeyd.onion [streaming/en]
+  ✓ kfahv6wfkbezjyg4r6mlhpmieydbebr5vkok5r34ya464gqz6c44bnyd.onion [marketplace/en]
+WARNING:root:Skipping URL keyxcths3jdxq5bj33ri2iugxoq6vdekqsfbeynnlxln7gpnoy2t2iad.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ keyxcths3jdxq5bj33ri2iugxoq6vdekqsfbeynnlxln7gpnoy2t2iad.onion [wiki/en]
+  ✓ kevsec74wbstoa5l7sezjsiyzi4gouvyn32wjso5a27ndmmfmwntj4yd.onion [generic/en]
+  ✗ kg2pf5nokg5xg2ahzbhzf5kucr5bc4y4ojordiebakopioqkk4vgz6ad.onion [generic/generic]
+  ✗ kfx33wcuhmy4zukilqo27zf7amx7b6cp3vgjgspvgmhrsvswo6vtjiqd.onion [generic/generic]
+  ✓ kg5uml7kms5uhwruxpyw3tsyjostomahjs6m4dtio4mrlcmggisdpjad.onion [marketplace/en]
+  ✓ kgjokw3rfzbla744o56arqe7py6oor24hndnfykjsdzfnuf4hbik2syd.onion [marketplace/en]
+  ✓ kgqxj54rfroza4u7hzzm3niz2nc2sycjcho64lt3wfzux4im6b7vbrid.onion [streaming/en]
+  ✓ kgng6hv2o2gtv6rzukdis6s74vpubuvjtknewb3npk7axp442nppxuqd.onion [chat/en]
+  ✓ kha55wqmxwr6wip6fcmwvgnu7slav6f3lu5ix5udap64miyjpyaqs2ad.onion [marketplace/en]
+  ✗ kh6bkebjmfztldqdnksdwzua3ve5eop7izoq2kdmo3g76cw4weentwyd.onion [generic/generic]
+  ✓ khazadcxtt22zmamwx5blsjeplzqq2n3d5ibx2qasdfx3ck47ajt26id.onion [generic/en]
+  ✓ khduewbapklddkgzg3mwwnlzlflqygn7clhguxk2t4kx6cfm6lwwqpid.onion [chat/generic]
+  ✗ khyi2562jsgqahmuaxov6736onfply3yg3gskjaimmckqwmxcmxwk3qd.onion [generic/generic]
+  ✓ ki67lelmxtbalsewxxntluimak4parrcxlmq2mzd45jgdcpjy3kmtlid.onion [generic/generic]
+WARNING:root:Skipping URL kia7ttoticcuxuwbe4xtd762kfhokqpxndatbadqsz3vj3lmuxjveiid.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ kia7ttoticcuxuwbe4xtd762kfhokqpxndatbadqsz3vj3lmuxjveiid.onion [streaming/en]
+  ✗ kiael7pbykdmi65a4l46p574ey6muout2ut6s3mqbpdol2gjclvy7lqd.onion [generic/generic]
+  ✗ kfwrvtyacdigwi5dgqsfdjbty7roax2i6cbrlbaotsbkqtljqimdkvqd.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 19 | Erros: 6
+Categorias: {'generic': 7, 'marketplace': 6, 'streaming': 3, 'chat': 2, 'wiki': 1}
+Idiomas: {'en': 16, 'generic': 3}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5820 URLs.
+[OK] Tor proxy ativo. exit node: 204.8.96.148
+[OK] 11433 domínios carregados do ahmia.
+  ✓ kidsk7vjt6rbm6f5tzzjlti2isf2yzzhjcvfawdamjprgtz6zisv4tad.onion [marketplace/en]
+  ✓ kidmxjr7ebf5teyluh6npigmkamn3ykupm4u25bys5bkgu2ritzpnmqd.onion [marketplace/en]
+  ✓ kidfll2yrnk2lodggv36gkgincz7xldwgzlxaqct56cstvsiuvmj7wyd.onion [marketplace/en]
+  ✓ kikurif2mzovksvdoowqbaqzxdhhdkgav2i774n73y6hj6acaqotiuad.onion [chat/en]
+  ✓ kihxjucuovphd2tnkoxr72gwv7prhuhcrdkemwc5gtnpfkwxv2rlhgad.onion [marketplace/en]
+  ✓ kibwmg25rvetgpo2irthuxg7xs6ft55hvdyz7e7tfbhziaikszdeilyd.onion [chat/en]
+  ✗ kidsu5zb4rgzbqb7s2cgm7zhiv3ov7rhif3qnn4bnhqt3wuqzaeiovqd.onion [generic/generic]
+  ✓ killerlau2toc2hcva6aapidtbhsnrugo54mnndy7zlpvxhuyinodlyd.onion [generic/en]
+  ✓ kill4npywsyvq4n5xe7rx7nl35o4rzhgnj35b5luvzsd6vxzw5dymbid.onion [generic/generic]
+  ✗ kindezduoputtzibcydofzvu2codmfweeftcq4ldkdqg3qmrqyzrp5qd.onion [generic/generic]
+  ✓ kingl5yq6n3h5b6bsc3ut7uytjdecvla3jbmhcofu4nzsogoap2oqnid.onion [marketplace/generic]
+  ✓ kingt53vg573sthyedjsu3oopcjbkqdvd3bfbrlaif3f4wxdayd6nuyd.onion [marketplace/generic]
+  ✓ kingltfkqktt6aovrjfz7rli7oinylbgqgtmwcdfokysoy5nfq5t4vyd.onion [marketplace/generic]
+  ✓ kingz3mfshjqfij3pkjq2fkknjqb6dhdvctmfc6bnstla7ms6vjyjgid.onion [generic/generic]
+  ✓ kingvvyvpv73fzc6ck3444jlxmo2svjpw2vakp5ayo255tibe2llvnid.onion [marketplace/en]
+  ✓ kinguintjobiimt5vrno67gwg6g6m6hd3appw2dljnol3aobc7mhb3yd.onion [marketplace/en]
+  ✗ kiq5rosimopnotuwqbaifis7g4of5nnidoydb5av4pqgf3ogoagpcpyd.onion [generic/generic]
+  ✓ kiribk5wf5obeialorlvnhyzbpad2qsfda7knzlt4md42ef4nw2zpfyd.onion [chat/en]
+  ✓ kitty76dvkpvxduskscnzcresnk4xddfseslrkrtun7nn7accktyimid.onion [marketplace/generic]
+  ✓ kitt264cskjspqq77ls5ev2y5awyvsduabgxkwoy7sbmofcfjkteptqd.onion [chat/en]
+  ✓ kittynrgx2ca4cf4bijz5mhmd5jpyfygrebfat7khnj5t7gyv3x7yyqd.onion [chat/en]
+  ✗ kittyoxjdldd7r45x3uwzomqlhzmp5l2ia6xiu4ps4k72nuh5mir6uyd.onion [generic/generic]
+  ✗ kimhacki773km53ptpmfjpmpitilwc43pczwiipztn33ecdjb2etesyd.onion [generic/generic]
+  ✗ kittyq2x4xzxr6zq47xj36ekumdymodfvyrjpryfbx7v37p46ftbjvad.onion [generic/generic]
+  ✗ kittygvqgypfv56qqk5cdsmj5ponxczq7l64rv5co64whpyazjlpylid.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 18 | Erros: 7
+Categorias: {'marketplace': 10, 'chat': 5, 'generic': 3}
+Idiomas: {'en': 12, 'generic': 6}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5845 URLs.
+[OK] Tor proxy ativo. exit node: 185.220.101.98
+[OK] 11433 domínios carregados do ahmia.
+  ✓ kittyz2sll6cyfufxihln3ukqlkf3yaoeqeyhtpgqaqnoaggky3xlsid.onion [marketplace/en]
+  ✓ kivken6qvmlbicmpqcdrcqwrnclfol25nuz6bbnagxgjlnwxxwm6biqd.onion [streaming/en]
+  ✓ kittyxwpf3movxghesblwp2xjbnsfgzavzkgu2ujohc6kehtapdz5mid.onion [marketplace/en]
+  ✗ kittyrimqkuwj5ebeed7tvfda3hbfame3b6qbbfcehnws2laddh2gbid.onion [generic/generic]
+  ✓ kjmjulpfpeihpuufi3bchkdnmtetzf5wohik7w3jbssy3m3tzpuf7gid.onion [marketplace/en]
+  ✓ kiwifarmsaaf4t2h7gc3dfc5ojhmqruw2nit3uejrpiagrxeuxiyxcyd.onion [generic/en]
+  ✗ kjarfwd4pbuvtotryez3lwvyunpgxg7wqr62swirw7rmnvhnfvzybtyd.onion [generic/generic]
+  ✓ kjsba5xg6vb7gvtzu7eecpwvsggem6qbvmw3h5enj3b4viqvksvktuyd.onion [marketplace/en]
+  ✗ kk3zlly6jhjvu42m7ek2zxdqhhqsk7vuomwr5nzq7bnyphqhvxx5r2id.onion [generic/generic]
+  ✓ kkmbm3mibx2orri5wbqvozhfquiupw6ioskvy4hnlqg24ciatiwl2uad.onion [marketplace/en]
+WARNING:root:Skipping URL kkr72iohlfix5ipjg776eyhplnl2oiv5tz4h2y2bkhjix3quafvjd5ad.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ kkr72iohlfix5ipjg776eyhplnl2oiv5tz4h2y2bkhjix3quafvjd5ad.onion [wiki/en]
+  ✓ kkeiowsiol6fg267iv2y4j5z64335plv5otngd5lt3tyoea7usixowqd.onion [generic/en]
+  ✓ kldv3ivk67fjszs2lqrso6puetq3qtz3mb4kceb4mpfkvinb6ozvkcid.onion [streaming/en]
+  ✓ klktvbm66ijfy5j7oflsidtcf3gbhrmbaaqfufxggflfb57rv5yakxqd.onion [generic/generic]
+  ✓ km67fgiq5v6epeift2ywbebuu42p7dog7rtahx3fohz5ewxlrcd4cuyd.onion [streaming/en]
+WARNING:root:Skipping URL klhghy7dshigm3ypglulanmhmaf7dpax3ljwvqigf7hqidbhwhbre6qd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ klhghy7dshigm3ypglulanmhmaf7dpax3ljwvqigf7hqidbhwhbre6qd.onion [wiki/en]
+  ✗ kjyoqdz5w54jyvsuavsgbdueg4xydoqxdh6bvnnzrkvc46suo5aedfqd.onion [generic/generic]
+WARNING:root:Skipping URL knc65t37zwzwntyzwmkjmdsbfkvjhdfcejt5n5ro7ndapw7pfxsryvyd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ knc65t37zwzwntyzwmkjmdsbfkvjhdfcejt5n5ro7ndapw7pfxsryvyd.onion [streaming/en]
+  ✓ kmpkm7p7rq35hmwhh3rafk64pgino3i7gxahtubkqvvco2ctvoouafqd.onion [marketplace/en]
+  ✗ kmksg5s5mb64c3gxxw2ltrk2yeqphzgfbgy7xwrm335blpvdumgzbiyd.onion [generic/generic]
+  ✓ knchaaxs5tdwyjbkxmezdkozymfne3dlnmqimzki2unyzwsfqy3bkmyd.onion [marketplace/en]
+  ✓ knyybdmc4kakd7gs4y6fvshg27t7jud5oiyrmaihijpepxbehcn7svid.onion [streaming/en]
+  ✗ kkxxftqksziue5wkfzpnlvmhswhxo23nvwn2bl4jqo7p3tqcq5s2xvid.onion [generic/generic]
+  ✗ knoy2zmnalkfbcxc7qj4yo6od5mcwg3fyzsrt7xqlghuvoqnvtzlt7yd.onion [generic/generic]
+  ✓ ko5enel7ogpruey25y3pcfmobcwrjiwwhyjp3t5nqsuqoytpsjrls2qd.onion [marketplace/en]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 18 | Erros: 7
+Categorias: {'marketplace': 8, 'streaming': 5, 'generic': 3, 'wiki': 2}
+Idiomas: {'en': 17, 'generic': 1}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5870 URLs.
+[OK] Tor proxy ativo. exit node: 185.220.101.98
+[OK] 11433 domínios carregados do ahmia.
+  ✗ ko7vhu246xatitgbm6sesun7ytt7k2zmlycib2dmz6asg24ft543j7id.onion [generic/generic]
+  ✓ ko7hy66nwq42vceqvxkvp7wb2wd73mxuxqqdqbhxm7u3ya6hwgsvxiyd.onion [generic/en]
+  ✓ kobiqoqrevo3gm243i72aoox45h2d655l3cirhttq3srgloeivdtgfad.onion [streaming/en]
+  ✓ kogbxf4ysay2qzozmg7ar45ijqmj2vxrwqa4upzqq2i7sqj7wv7wcdqd.onion [generic/en]
+  ✓ koinbas5hp76zuf2zm557krscpw2yb7pmkys4ayw7jzxkma6tfcvvmid.onion [marketplace/en]
+  ✓ kofuoeww2ksfojlqieg7cgdcfjmfjyqepm6pdnfupmjlu3h6gvwcvfyd.onion [chat/en]
+  ✓ kon43lsxbw57sk3gvenwtuqxe5acemrlw7j7vqtiob45wfi3i6wcfsid.onion [marketplace/en]
+  ✓ koreavbxgwdyiddu4slym3jsarpfy3erbh2tfld6kjhcsmcroh633kid.onion [chat/en]
+  ✗ kokfn7gxzuz2sg6vw64rr3vgn36qgmifq2jqjatngkrnbgavti6iqwad.onion [generic/generic]
+  ✓ kowloon5ddwuqwlqckuibv4fxw6m3a6ymk5kinigbjsgjcly346dh7qd.onion [generic/generic]
+  ✓ kpznj7bnrbg6w6umomqlqcu26gw75lwwvmuhfv2nzbvh2zfsg6gbawqd.onion [marketplace/generic]
+  ✗ kp4hkeamnay7bwzvjqf42erlsbhj63yuryrbvsbk6luep2ftlynj3vqd.onion [generic/generic]
+  ✓ kq5gmlbnojgcqzxf6i2guvwi3xkyzy3gjbww3daugddfinxkftcvpfyd.onion [generic/generic]
+  ✓ kp5etm7zyz52rxl2a5whbdxte4q3fjallmhbrylquk4an4f5hcsd7wad.onion [streaming/en]
+  ✗ ko5x6tlrwn6durerw7nmeqsq2dtvsvtxczuxt7zriamfdvmnmjwk53qd.onion [generic/generic]
+  ✓ krakefkb3oxfjvg4kezxivel2ewb575nel7vyh3dlcdzyfr76vqcvqid.onion [streaming/en]
+  ✓ kqeseog4hq7m4o3bcnc2it7l5qxujdguqtmk5yk2nrcvkjvzrhlzmqad.onion [chat/generic]
+  ✓ krakekspibxml5q2engpqifvebsj6s4buoqo5f2i53ptmc4plzizj7qd.onion [streaming/en]
+  ✓ kraken2tfbggpw6zlkpytr7obsnhlmjl6tw5mz7nkw2xvgro6lpnhhid.onion [generic/en]
+  ✓ krakejur652mvhygqyqywgfphyhllsb3a3avz32uqalyuub6z4vphgid.onion [streaming/en]
+  ✗ kraken2tfqgh5m5jclfv6qngrad4k5pv3lo4tvrjxw7h5otjc22xsfad.onion [generic/generic]
+  ✓ kraken3ybsunip7h6zjjiles3omca4rnsknbygwl4slkucez5ga4lwad.onion [generic/en]
+  ✓ kraken2trfqodidvlh4aa337cpzfrhdlfldhve5nf7njhumwr7instad.onion [generic/generic]
+  ✗ kqyxngsuibiklqj2mn3jwd5k5zns63ukeufkidjg2bsrisw57643zgid.onion [generic/generic]
+  ✗ kraken3yjkhwftjp4jt4dw5mzpysplfuahbot6gyoyvjqhuobv7al4qd.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 18 | Erros: 7
+Categorias: {'generic': 7, 'streaming': 5, 'marketplace': 3, 'chat': 3}
+Idiomas: {'en': 13, 'generic': 5}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5895 URLs.
+[OK] Tor proxy ativo. exit node: 185.220.101.98
+[OK] 11433 domínios carregados do ahmia.
+  ✓ kraken4qzqnoi7ogpzpzwrxk7mw53n5i56loydwiyonu4owxsh4g67yd.onion [generic/generic]
+  ✗ kraken4qzbp2mb6dtt6ycvhjxpo34okfuta77zpyqhjrfz5tmtljo6yd.onion [generic/generic]
+  ✗ kraken3yvdjpiy6hjofdymdlhgp4weak5x7h56t543hx46lajnjsyyad.onion [generic/generic]
+  ✓ kraken3yvbvzmhytnrnuhsy772i6dfobofu652e27f5hx6y5cpj7rgyd.onion [generic/generic]
+  ✓ kraken5af44k24fwzohe6fvqfgxfsee4lgydb3ayzkfhlzqhuwlo33ad.onion [generic/generic]
+  ✗ kraken5af7gzkr67k75aoarmxgqbktrf6vlodnurncgpia62y7xtdwqd.onion [generic/generic]
+  ✗ kraken7jmustdjr5fhsz3jtaprvym5r2ociy4aq3h6fcpwwuhgzvc3yd.onion [generic/generic]
+  ✓ kraken6gf6o4rxewycqwjgfchzgxyfeoj5xafqbfm4vgvyaig2vmxvyd.onion [generic/generic]
+  ✓ kraken7jmgt7yhhe2c4iyilthnhcugfylcztsdhh7otrr6jgdw667pqd.onion [generic/generic]
+  ✓ krakeo53iyj4lhfm7dfbxij2kwv3fl3vlibzp43gwji4cpelc6fyvhid.onion [marketplace/en]
+  ✓ ks5424y3wpr5zlug5c7i6svvxweinhbdcqcfnptkfcutrncfazzgz5id.onion [generic/generic]
+WARNING:root:Skipping URL krang2src45cvcgqxmxbjqhxt6v5duvi5rjcsjxri2pryxllyzqsdlad.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ krang2src45cvcgqxmxbjqhxt6v5duvi5rjcsjxri2pryxllyzqsdlad.onion [wiki/pt]
+  ✓ ksuxzwo3u3kpka736eepfpmtcqb6lbhmqam6ac3wzvweqinzz7llhlqd.onion [marketplace/en]
+  ✗ ksplsmn62cliv3qkowglnnyrtzxuaewlpsrnjwjvnpgm23qo3v37fyqd.onion [generic/generic]
+  ✓ kt4lxv6sp7xn5mkkteooly6a6hqyi2sqtiv2lznjc272llukrpswkwad.onion [marketplace/pt]
+  ✓ kt2bqe753wj6dgarak2ryj4d6a5tccrivbvod5ab3uxhug5fi624vsqd.onion [generic/en]
+  ✓ kszlawvr46yiis4clykk75hfe7j5j2ugxqpg27iex3ftr5qmsu2rcfad.onion [marketplace/generic]
+  ✗ ktacmtuao7chwxt5f56o3hbc43dp4duqskrdeadgh37swgggn5ubxrid.onion [generic/generic]
+  ✓ ktpbla47mql25j5vwjmqub2af56bfuaf2irgkcv36bdsvwmp5dozrdid.onion [generic/generic]
+  ✓ ktplto4figux7s6pg5rs3tkjl3d35ejcbia62fvxcheljqufkpuujyid.onion [marketplace/en]
+  ✓ ksvr4ymywu6vyvd35qjksg5vs3rlyp6kv2sgkvqugvwkg3rvrlzzwzad.onion [marketplace/en]
+  ✗ kty56mzyzlloig6eyiyiwysrdssv2atfweq6e5vyiwm6gzdqkhuxfjyd.onion [generic/generic]
+  ✓ kuahhwcnwrmy2enaop5fziuk24xm4mexfutpcdvm6owjq2ks5wf2foyd.onion [streaming/en]
+  ✓ kuiperjtiunj5hpmny4vrsjkpgbvi7opii3rdexghr5tj4dy6ll6x7id.onion [marketplace/en]
+  ✗ kt4ykvn3gfdo3453zxy33vpdn3z2liksuepwcg3sjxh6oi2ceflei5id.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 17 | Erros: 8
+Categorias: {'generic': 8, 'marketplace': 7, 'wiki': 1, 'streaming': 1}
+Idiomas: {'generic': 8, 'en': 7, 'pt': 2}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5920 URLs.
+[OK] Tor proxy ativo. exit node: 185.220.101.98
+[OK] 11433 domínios carregados do ahmia.
+  ✓ kukfanqnxdq2aopgvpdf73t37a2ehxevkgtjnixjbco6z4olbeewy3qd.onion [marketplace/en]
+  ✗ kukmptgdo4kasvgb3qslmwnld64h7zmyyzred3aaykbxyf6xe7iksuid.onion [generic/generic]
+  ✓ kuiperoux5jg4q6me5owly6r4aord2msjrynv4sotrg4dz22gy37ueqd.onion [marketplace/en]
+  ✓ kuipervayg4u5xigvyb46awacfgidrqvi4itnhhilcblz4iywzowtqid.onion [marketplace/en]
+  ✗ kuou33vuy7de7xpcsolskbhqimphfk56wtm2v2evgxxyh4wc4uwxwuqd.onion [generic/generic]
+  ✓ kunw7bzxlzaeuyvptcodvd4fjqkpr4mcwrwkti5n37ktlmzs2ntfwuid.onion [marketplace/en]
+  ✗ kur2qk5mm2skskhlgax4nv7ygjcn24gitiaqydjoozuapp66wnbzmnqd.onion [generic/generic]
+  ✓ kutj6adn66vdrpauox236wbc6g52ogg3pl4nfb5bfx7gzdgnqvhsl2qd.onion [generic/en]
+  ✓ kvaa5nyhpzgtqu77rq2w5xvws6rgxv6vrwv7sr7wujronft36tgfnlyd.onion [marketplace/generic]
+  ✗ kuro3vrgpd26aiibzplwucmhrfox4qqytvawrxl3mreon6rb7ggdclad.onion [generic/generic]
+  ✗ kwa3ttrzdagdcqabof5clpdllenbvvtgxdjjbj4ff6kqlo3znmt22sad.onion [generic/generic]
+  ✓ kwgwd67ovgilrssisfvv2knjg3msdi6wlgzotqixoxywfocqebsn2yqd.onion [generic/en]
+  ✗ kvi2pitbmovmbkdox6rxghwfts6lqwj2dnzzwdj24aztmngafiuee2id.onion [generic/generic]
+  ✗ kw4zlnfhxje7top26u57iosg55i7dzuljjcyswo2clgc3mdliviswwyd.onion [generic/generic]
+  ✗ kwa7j7bdbo3eqfhmbggla5vnj2iu37n7b54pvejnscyrsveb5zt7l2yd.onion [generic/generic]
+  ✓ kxyxzejb35dt6yaqt4vkxzgztav5bcb7q6bbpjlf26epa22ft3huokqd.onion [marketplace/pt]
+  ✓ ky6urnzorg43zp5sw2gb46csndhpzn6ttpectmeooalwn2zc5w44rbqd.onion [streaming/generic]
+  ✗ kyb5vrehqma6gsmsrg4jpl5fl6quwhvakq4qui3kffebtpc5r4i54hid.onion [generic/generic]
+  ✓ kybali6k272pnfplv4ymc3a2cwokmkvtkkp35tduvzqh5vs5nr5hmhad.onion [marketplace/en]
+  ✓ kybalinaupg64hsx47q6srz4ah3xwm3qiov4ezb2j2uypfql736ld7ad.onion [marketplace/en]
+  ✗ kx3q4wrms2zc744h3yjlfj47r2vo45vobwra4r3eujcdt2cntcbe3wad.onion [generic/generic]
+  ✓ kybalinln7vjr4sde2xgjgsdfihbfi336lwi7hdsbcfgyoqsulbcr3id.onion [marketplace/en]
+  ✓ kybermen3kskkxnaattjzr37pljzhglgqskr7ijopvueiwm3rt3mbyqd.onion [generic/pt]
+  ✓ kybalirctg6kmswnjwh2kkj6amk6pqpc3i5c6wbt3mjxi5vfmmbg2nid.onion [marketplace/en]
+  ✓ kycc3vpjk7yqewkhrqqct6zz5342crmxdto3ltlkvi6vmf4nippzw4id.onion [chat/en]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 15 | Erros: 10
+Categorias: {'marketplace': 10, 'generic': 3, 'streaming': 1, 'chat': 1}
+Idiomas: {'en': 11, 'generic': 2, 'pt': 2}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5945 URLs.
+[OK] Tor proxy ativo. exit node: 185.220.101.98
+[OK] 11433 domínios carregados do ahmia.
+  ✓ kyclb6ewpvast52uxosfjfbjngajygkgoinsl3dlnudclltbcn5pscqd.onion [chat/en]
+  ✓ kyckns3lry7mgtgyrj6tvreowukogyulfypt3qvlmd4jvz3oh3a2haqd.onion [chat/en]
+  ✓ kycu6jshbdaomqzb5tlxufi3vx2grdqwicr4eznfl45dfbwcuvlwrhqd.onion [marketplace/en]
+  ✓ kycunt3cwzyxbwujxtdoothfzxhrs6pzokxbrgkrtttlg4uwp5ysm6id.onion [generic/generic]
+  ✓ kycuo4ufx5hvbrgjwgha5u6iciao5c357oimllevmqgcab53islffqid.onion [chat/en]
+  ✓ kycuyjaffmedd6yj2kwvyj2trx2aw4iofso77thf4l72jy2fpcl4grad.onion [marketplace/en]
+  ✓ kycripxmrmlmkfaqf4hwchilhtrp36nu6vyjoh3e7rmsgmyylxfm25ad.onion [generic/en]
+  ✓ kyrgyavryye5coo3mujpnwdkhm4lju5nhvfkrcolmnr42jchsc352vid.onion [chat/en]
+  ✓ kzmcudnrse3nbz5dtnqavv4v3lkps5sadh3tl2wvf7ot2fhgj37enrqd.onion [chat/generic]
+  ✓ kzqsxm6risatnzy3ug5dgxg73uerbobf5zrbbnuzsizsbygouyozjwid.onion [chat/en]
+  ✗ kyunnnckhnkl6oevonhwbltenwbgxwxf54mcpvmicphmaeqr5ourgqyd.onion [generic/generic]
+  ✓ l22g4wpmnolirlgticza44obcncsji56rs247prtu2272biei7nubiid.onion [marketplace/generic]
+  ✓ l235ty4q3vqzyvo5k2i3b5ufuzrtial2cgcwu7bi43mip4ilhmnlx4yd.onion [chat/en]
+  ✓ l32xh5rwlpynfmtb6mrgzaab5vklygd3t5tvqtwgrlq5muf7wxww5uad.onion [generic/en]
+  ✓ l2i3v3zt5mtay5zlvsul6sa6t2wvfpzxl3uuivsx6saj6ljcr5nmx2id.onion [marketplace/en]
+  ✓ l3peycqknhxymf5stxmt5etwv2gmh4dsitlzhc4ji3mknlhooerml6id.onion [generic/generic]
+  ✓ l3tczdiiwoo63iwxty4lhs6p7eaxop5micbn7vbliydgv63x5zrrrfyd.onion [generic/en]
+  ✗ l4uxg5mgr3kjjtlnc5jfrjlwpk4yb3og4fzu3wq2yoknggv2p34yw6ad.onion [generic/generic]
+  ✗ l4jvqsbfrknjzvhidgqvja3ue47sjnrpk52crelljguznr2uaum3xjid.onion [generic/generic]
+  ✓ l4wvrny7rzf7ec2cmp7w4frl6okcvxmq662zrbhe7v3pvxplcuzf2gyd.onion [marketplace/en]
+  ✗ kzeej5oujcyytuk3wf36yxsuwfq44lp4roqvxwzshyhedi6arley6oid.onion [generic/generic]
+  ✓ l5coil3vexwn4fthkltwp62jmrcyv4wqvmgwqyjlux6kqu22ujz2m6id.onion [marketplace/en]
+  ✓ l5hudroftex6memxipycrdy6byfddfsdq25dcxdnbbcayoxl6mtaplyd.onion [generic/generic]
+  ✓ l56v7qaxfolqpsefudsocwtonykameikswjrm4mygzlczgkqwflfnmad.onion [marketplace/en]
+  ✓ l5zeda3izohyqdlgdd4fft7zxocuyxysqjvoqzg5hjipya4kgbk7crid.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 21 | Erros: 4
+Categorias: {'chat': 7, 'marketplace': 7, 'generic': 7}
+Idiomas: {'en': 15, 'generic': 6}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5970 URLs.
+[OK] Tor proxy ativo. exit node: 185.220.101.98
+[OK] 11433 domínios carregados do ahmia.
+  ✓ l6qfikgu5dnui4t6dmafk64bm5y2enb2ci6ap2x54ttdqlkho4dh5hyd.onion [marketplace/generic]
+  ✓ l6memd5kbtfmjrjmj7rnxgqtkpl4cmyqxvn5ergn7d42idr7hs67vfid.onion [marketplace/en]
+  ✓ l6p46zlntatwvimhn3irsftct3wlzgnqxnznm72ojes52xk6i3kfxtqd.onion [chat/en]
+  ✓ l7pl4c4stpscd3kzrczzmeyiv5k57a3a6ss4lubdp5uhpmzzgstf7sad.onion [streaming/en]
+  ✓ l7rvurq54u3wplmczvyne6dd52qsem2leotnifyimt6hgycsnvg5bfyd.onion [chat/generic]
+  ✓ lab4llqv7w3a6ir63ny72zpnoena3gbquytng65zfnjzaavzuudc4eid.onion [chat/en]
+  ✓ la6efrix3ykheorg253hwqnpj2e6kng7vtefe3d2fzdcvl6mb6keqgqd.onion [marketplace/generic]
+  ✗ la5tlzncrpttaqzfvmtrgixl6u77w36ueqx5e2v47uqqrk5i5hmsxxyd.onion [generic/generic]
+  ✓ lahutdfgnvouzytvmnfzebpkls262ynek5ymczjgtafgulk6ikzhsuqd.onion [marketplace/generic]
+  ✓ landmkk3hmfa7izggdzeibclmpvqkwxt34ulertdvvesnoqagztkcayd.onion [generic/generic]
+  ✓ lantern6vrwheap4iahuktz3jtwvovrzhxgwgzvrvp46brdzzekxibqd.onion [streaming/en]
+  ✓ laptomrxeobz3mzi67kvhzgxnuzmho7jnowadky55k6a6isjsqzij2yd.onion [streaming/en]
+  ✓ laj7lsypjzq6bqlezxikj6skwg775jqtqxlvyf76nbx35jf5p2l66rad.onion [generic/generic]
+  ✓ laptomuvfcdhofrv3ujpzxua45l4dijzdppezt4y7aulhiysery7rnqd.onion [marketplace/en]
+  ✓ laptotf4yzkcx2vvmzyjhglwi3fzd6cwxe3wyw7zipjluipoeclpokad.onion [chat/en]
+  ✓ laptopgpgy7pjiqp7ckncst5k3r32nzjzhcp3gtkx66ysb3bm44ugkad.onion [generic/generic]
+  ✓ latelune7irlnw4mvn3abry6557fvzt74wi3j4wvcdr7axvo7sfcehyd.onion [chat/generic]
+  ✓ latestgogctjgn6w2soefmrid3hgpbnwl4nt64t6xa6ytd43l7oblhqd.onion [generic/en]
+  ✓ latinbv5hvg2cpey45bj6yk2k34qhby2aunj3lpy6rjau6vckztbflyd.onion [generic/en]
+  ✓ latinjli5zx77dopzfe22jqfrh22xozqfhpdegwsyzpzqhztufugjnad.onion [streaming/en]
+  ✓ laptojb3e26kdwzq3vmwv74pffyrlrcrixfebup53ocllojwupe5iiqd.onion [streaming/en]
+  ✓ latinogvd6x4r64c53iimz2wbn2co3nw37q7jclfgap6z5su7kqaq7ad.onion [streaming/en]
+  ✓ latinn2cq7wprfnd5iecd2vd5xzstmuwaj3olz5qn5y2d2msvwmhgfqd.onion [generic/en]
+  ✓ larrc5gh4dldbu4z5ytp7opoek7gstgxfumkagpb7iv6q6kozwiaalqd.onion [generic/pt]
+  ✗ latintek64eosk5gbbllklhscehqysaf3ybb4b4z53t5novuavxlq4ad.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 23 | Erros: 2
+Categorias: {'generic': 7, 'streaming': 6, 'marketplace': 5, 'chat': 5}
+Idiomas: {'en': 14, 'generic': 8, 'pt': 1}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 5995 URLs.
+[OK] Tor proxy ativo. exit node: 185.220.101.98
+[OK] 11433 domínios carregados do ahmia.
+  ✓ laundry43auok3t3zfcnzb5oa4bq6wdtjiarrdxz252prrdolsfhv3id.onion [generic/generic]
+  ✓ laundrydi66qtebrida5o4oqraf2jrvxxmenzdj3jr2tli3cpd5il2ad.onion [marketplace/en]
+  ✗ lazarusft6gph46uma6x5xawqfrg55t3dsunbkwh2zbsj5qpdkzvsyid.onion [generic/generic]
+  ✓ lazscnfxrmbjqleqo3hagtigcpyd3rhsfkhnp5qfaaxnnpvcw4v4urad.onion [generic/en]
+  ✓ lbkp3ahrxbkrvliw57veux25sfndqc3pjvxn5hhleynleokfislrlgid.onion [streaming/generic]
+  ✓ lbpay5cqzvmubgakbwtadtkrasv5kxxszopfu4mreru27kyuk5k27bad.onion [generic/generic]
+  ✓ lbtwuhtdx52wcyrb6dystop5bkn4opyxdlphcxlt4phoqma4k4wgvgqd.onion [marketplace/en]
+  ✓ lc7con2ouegch7qpb5raaaa6qphlrbuaahjbkhxlxfwm7hcqortyv3ad.onion [generic/generic]
+  ✓ laur3pa6g4fdqwi7plgo3ie52cfa2mratut27ifn4fgeir6cgchmfkyd.onion [chat/en]
+  ✗ lcdfwxzrniobzbbvjrw7eerlksawku3rvaxkin4d2blgublk5eibl4yd.onion [generic/generic]
+  ✓ lczq6g6qpwo7aiox2e7i3ykheoownfl5cldo23jvmpptwfmjjahnzwid.onion [marketplace/en]
+  ✓ ld3d4bur4p5h46pedlioxel26yyht2z35tkmnuttzgxwlkel6j6f4yqd.onion [chat/en]
+  ✗ lbcgwymtqel3o4kd2vqaq5lrlatb5y34ykq62hbkxzag4rzoz6s4mbad.onion [generic/generic]
+  ✗ ldauddkmqzhjyxcndgrn2sb6d2htdbwamgrgajg53ksn7dmujsvljzid.onion [generic/generic]
+  ✓ lc6dnhwxvdat2xb2j5rv3oklotrgiazvzlybnxfwosmfknnj5nvklxqd.onion [marketplace/en]
+  ✓ ldlsslgc7bppwbzpbn3esh6jbxwekdm3ggdik7g5jur2u2rvanxhrqid.onion [marketplace/en]
+  ✓ ldnbtei7lftrgvsgt6zc4nwcop4chwco6jf2kudjgecb2lprda4gzxyd.onion [streaming/en]
+  ✓ leabkljmrobtlix6cjyrzooriwha465ba432vg5dyqh3ilai33gyzwyd.onion [marketplace/en]
+  ✓ leadsjuh5vc7q2etssqh3vvet22fvkbdm32gkryuo3s3mljsnq7z2wyd.onion [chat/en]
+  ✓ leadsf5txr6r5uihcbko4ox5lv4o6o4vjjxvsp5gqhf6jrpcpbzc3had.onion [marketplace/en]
+  ✓ leadsnetucmuhtk7hjwiqfxilcn7ju5nwtwnwtyrhp2rvn37qqdoodid.onion [marketplace/en]
+  ✗ leadst6o2r7pqnn7nauyvdojjuuspiu5ae7xspcrcbmj5tqnl4vo6iqd.onion [generic/generic]
+  ✓ leakbzdtxzzoczqcrdtwjxugk5lwq5cw4ym7oqfa2dst5wcyvni4e2yd.onion [chat/en]
+  ✗ ldjsi7vux4tsqchf44y6bdnwizxjnilp3xqxkp3i2eevezadpecvweyd.onion [generic/generic]
+  ✗ le6et2jupzqju3sptjlni4lzcxg2yisaecehrzwontny5bm5ivrp2rid.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 18 | Erros: 7
+Categorias: {'marketplace': 8, 'generic': 4, 'chat': 4, 'streaming': 2}
+Idiomas: {'en': 14, 'generic': 4}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6020 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.50
+[OK] 11433 domínios carregados do ahmia.
+  ✓ leakgqiisniyslknsvthdess4nsgnmoouqreid5baxsguu3y33inmsyd.onion [generic/en]
+  ✓ leakjochrahfodjfxgsxjbhq6pdjaqpn4tmhly2bnqamnthoaene2fid.onion [chat/en]
+  ✓ leakmciuy5oizrm2qzgnul7xvzdnx5osofwh4ey2i4phnpx3l25kl2yd.onion [streaming/en]
+  ✓ leaklook7mhf6yfp6oyoyoe6rk7gmpuv2wdk5hgwhtu2ym5f4zvit7yd.onion [marketplace/en]
+  ✓ leakukecpmtbmqdh22oosiadnjplqshiolcqsheutbru6ivava53qsid.onion [chat/en]
+  ✓ leakxkr374tgx3m3y2mj76z77uqk6hnpd66kauz62ngeru4rehiejyid.onion [generic/en]
+  ✓ lebandlk5zdkoguk6okhunsknjiasj3vqwwuu2cnxepk336nt7e7ewyd.onion [chat/en]
+  ✓ legall7sbjdeuuxkru7k6fj5araxw2we4xvoq4md3amkquommzaxcjid.onion [chat/en]
+  ✓ legalpyj57wwnsfnyokc357z3lsjpc7u4r7zavm72fqlemnlqwayxaqd.onion [chat/en]
+  ✓ legitbswjmfvrfyllrya4smxveb6vso4svjtz5vl2oc3hcm6wle53fqd.onion [chat/en]
+  ✗ legit3euc54d6asojanojpj6qvj7g4wl727ep7njqtjslkguysh2wvid.onion [generic/generic]
+  ✓ legitmztojjvi6rkc3rin7rzrmp7v5mgqhcvc74p7k5knbgi46e5sgqd.onion [marketplace/en]
+  ✓ legithfwhggsa7f4n5gjenkktsbtv5jnex3pzqlt32hxnrugx4ssliqd.onion [marketplace/en]
+  ✓ legite5mshw5kqcwu6gooz3kqhowhd6ztl4fi5evtnd66gxx6f7cnlad.onion [marketplace/en]
+  ✓ legito5n2kwqchjvxskrd7fq5id2ihcxcrxqobdcqahmpcpirxmjvcid.onion [streaming/en]
+  ✓ leakfindrg5s2zcwwdmxlvz6oefz6hdwlkckh4eir4huqcpjsefxkead.onion [marketplace/en]
+  ✓ legitpvfiniynihoqz3gsh7ugzteuy6e7exceuivawvegxdqe55ftuad.onion [marketplace/en]
+  ✓ legitsuqst6zgeyawsxssao4ny54kzjwjisg4akjnlvenktl6whs4lqd.onion [marketplace/en]
+  ✓ legitqpqaxo2cprgieys2vc6pkfvyppzlyrrmtmafdegkhywzvlhthyd.onion [marketplace/en]
+  ✓ legitv6lixtir6j67povearmupo7luhcf5tbk674ekdha2ebbecatcqd.onion [marketplace/en]
+  ✓ legitysn7h7eds4tfkv45xft7ywhpyqoedqi3kowhozuxvzhykho57yd.onion [marketplace/en]
+  ✓ legitq5oszlschfua4nr7ly5ifkzn7vzb5nkvqngw4vb2qnf342ockid.onion [streaming/en]
+  ✓ leo555j3w7lez7psivlhxcr4le7gehgd6bfpannpae67cjgsite7vgyd.onion [marketplace/en]
+  ✓ lesbi6rxrxjmf5kiu4psoykddmd34jzw4fwxuucitdi4bhqop2jlmbid.onion [marketplace/en]
+  ✗ lesbi6lotybcbvwx7l337al7rxo5gbfwr5w7cfgpbkng7e4xnnska6qd.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 23 | Erros: 2
+Categorias: {'marketplace': 12, 'chat': 6, 'streaming': 3, 'generic': 2}
+Idiomas: {'en': 23}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6045 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.50
+[OK] 11433 domínios carregados do ahmia.
+  ✓ lesbifpi5uwwt5ai2u7bokfb5ptzvmmcw3k4up3a26nycpuqdkvmegqd.onion [streaming/en]
+  ✓ lesbizwb46unirkpb6u7ao5sekbjvw45upynqrxfirbo5qhobmhudsqd.onion [generic/en]
+  ✓ lf5j2ovm7zm3fmno7o3dikcx2qw5ipxpztoj6ljvfqkuuhwsxb6bnnad.onion [generic/en]
+  ✓ lesotorctbnv3zt6b6kxru2vrxxkt2lthgqnubpdkzhgld6umt3nsjyd.onion [chat/en]
+  ✓ lfdy3huo44w4xsz4tahl2clspag2sq36rqyvif3vwkbndmokv22o57yd.onion [streaming/en]
+  ✓ lgbtqiadfu5epuzzc52vsmw657srrg4ud3b3fm6wtigono5ii3ldw3qd.onion [marketplace/en]
+  ✓ lfv7k5met443dc24mzdc4zfxkp3oozyz6viksgdsf3vtzkbv6odzqkid.onion [generic/en]
+  ✗ lg7a3q6driwitpew6itdmrxgz76mtn6ctrkzfkpcwmmkgun5cv3etrid.onion [generic/generic]
+  ✓ lgbtruso6nmggmbveyu2hdbokkrl7y4zb5ek6pak2s2zbh2ulwzfg2yd.onion [generic/generic]
+  ✗ lgbtqiaxts45yhtg5gndaitbbz5yrstdrsxyr7bbo6glpji4iq53xnad.onion [generic/generic]
+  ✗ lgh3eosuqrrtvwx3s4nurujcqrm53ba5vqsbim5k5ntdpo33qkl7buyd.onion [generic/generic]
+  ✓ lgktbbheycaewjd7vts52amytpval56ebwfqwjtclacpukbmh6jncfyd.onion [marketplace/en]
+  ✓ lgmtjgfpqk6hpik7yygkhavqivn6wsmfa7s7vszmcxwqkpwodinbhnad.onion [marketplace/en]
+  ✓ lgrvlwowyf5y7gtxcph6kgx3bvw2yj2yvxxcawr4nxyrjuzi5nsypuqd.onion [marketplace/en]
+  ✓ lgx7wijosz3mdmb6n3sjydwjyd3gf3yslthqlwmqius2xa3l5ayrofqd.onion [generic/generic]
+  ✗ lhddwynig3uvmajz3kh5ko7muwrt5ev6g4bqhr4xcjib7mzsb5ocmkid.onion [generic/generic]
+  ✓ liberpq4mrdar2k2tdk2nlvllzymqf6jyiwrrfc5knevproi7p3iywid.onion [chat/en]
+  ✓ lhdp2wkdwynwfxogmhqndgzfepwu4nbzllfompppmbetrcp732rxrbqd.onion [generic/generic]
+  ✓ libertycbjj6nf4rra35b2ugny4cl3sy3bxjk4sxqewynwd3p7q45vqd.onion [marketplace/generic]
+  ✓ libertywigaxfplcwymrpbgwcnyelzu42r4lchpp7h4onr4c4dnwndad.onion [streaming/en]
+  ✓ libgenfrialc7tguyjywa36vtrdcplwpxaw43h6o63dmmwhvavo5rqqd.onion [generic/en]
+  ✓ libraryhmny4k3t424tznkzs3776hkn3tw5wijt2bqjvavpwh4544mqd.onion [generic/generic]
+  ✓ li3zgrvwxpgjgvyeise7z2tzmhvq5tvi5zurba6b4nrzmr7uwkczvxqd.onion [chat/en]
+  ✓ librebazovfmmkyi2jekraxsuso3mh622avuuzqpejixdl5dhuhb4tid.onion [streaming/generic]
+  ✓ licen7n3tln26okfu6rsrbtzvt3nwmq5n76kimizeutc4xot5vdrohid.onion [streaming/en]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 21 | Erros: 4
+Categorias: {'generic': 8, 'streaming': 5, 'marketplace': 5, 'chat': 3}
+Idiomas: {'en': 15, 'generic': 6}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6070 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.50
+[OK] 11433 domínios carregados do ahmia.
+  ✓ licenmduiiimof4kbatvuq552qtsgxdeuel2h7sfmfpiaktwdubewtyd.onion [chat/en]
+  ✓ licenecmasqvfrucwsl5ln4t4ddvhcml45q7nr75xmmmbdhcgtqnbtid.onion [chat/en]
+  ✓ licencxk7rsotktlobw25txixjifeepdq2qlimp3jdupbuwehiqv32yd.onion [generic/en]
+  ✓ licenhsuicygvb2s3roynqmph7tayk6pfxdtwldqusnttiftmejsufqd.onion [marketplace/en]
+  ✓ licentmehkfczdctbyl72ga4hwava6ptrt4sjxvz6lfy3dzebrnf4nyd.onion [chat/en]
+  ✓ licenua7lepsvansvncasnvtpcfpdwixlvhaewkvoqgdl65czqdzdlyd.onion [streaming/en]
+  ✓ lightwolnqu3dxhfjxuos3nofvjq6ifgk4q7fxda6ho3xcjddkftltyd.onion [generic/generic]
+  ✓ light5j5v4a4ecijczxazkcjc7sk2q5tnv22xawsg4nrdyn64pkctryd.onion [marketplace/en]
+WARNING:root:Skipping URL link2akbbav5iry57yxn36aqwgvtagasiwcwb7i22ivluozhvgrlwlad.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ link2akbbav5iry57yxn36aqwgvtagasiwcwb7i22ivluozhvgrlwlad.onion [wiki/en]
+  ✓ linkan5d43qq3fhbu5zqsu7spvmweuql242xwy3rs2cxrtxrn27lacad.onion [generic/en]
+  ✗ lilienk7cc2ny3k6y3k3uteqou6dlisc4bz5jzhd6tfatqvsktb2qdad.onion [generic/generic]
+  ✓ linkan7wzdcb4say6oydvbn6jeiaukusg6b6nwzlr43cxygfuuhseqyd.onion [generic/en]
+  ✓ linkanofokndsx5ifj77c6vt2uj4dypmtwi7yqt6627wj5bebeaxbmqd.onion [generic/generic]
+WARNING:root:Skipping URL linkd2j2bvrqqumj7vkcc6hlfdtnqdysmdxrolcmbl35cizrdclianid.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkd2j2bvrqqumj7vkcc6hlfdtnqdysmdxrolcmbl35cizrdclianid.onion [streaming/en]
+  ✓ linkdt5tu2p55wilxlxj4v4vzrdvtackgr2uvc6bz4updosgicht5aad.onion [chat/en]
+WARNING:root:Skipping URL linkflxejb6j7zbjjemafkwmunzpcnbeteputvwekycpxf2errjvjdqd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkflxejb6j7zbjjemafkwmunzpcnbeteputvwekycpxf2errjvjdqd.onion [wiki/en]
+  ✗ linklvx3adsbnthtygfns6udylfwcbyy2vw23pvuoou7lz37irc6k5yd.onion [generic/generic]
+  ✓ linkqj5or5o2imcviwn2tj2qttle63o2jjzo37ywn2ls3dnfez4fknad.onion [chat/en]
+WARNING:root:Skipping URL linkq5ht3imqisyjfuawrzedyenhgigzsf7coay44l4bh4aapasx2rid.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkq5ht3imqisyjfuawrzedyenhgigzsf7coay44l4bh4aapasx2rid.onion [wiki/en]
+  ✓ linkqpuu4xtjel4mcm4i5nmpczsvt34dx5u7clzuncgottqmqo5lttqd.onion [marketplace/en]
+  ✓ linkrj2dyrfftfh5zwo6tdmoblwms4cwknj6sv3i22qvagdskx4edqyd.onion [generic/en]
+  ✓ linkrsrzwe53ctxda7mselrbjjjq3u3ngvxigt34ht6kts6zbrff3iyd.onion [marketplace/en]
+  ✓ links33xghqaj3cw7fjfs6m3wdw65yf37fx6vzsdgqaiu7mrvsalwfad.onion [streaming/en]
+  ✗ links2wdw5eokm7thraif6skhb6pw5zbnnhbta65n2lmh5h52erpaqad.onion [generic/generic]
+  ✗ links3ksjew6q4f5c7dq2fxvjr2kuqh7257nugiov6vhvowpv4b65syd.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 21 | Erros: 4
+Categorias: {'generic': 6, 'chat': 5, 'marketplace': 4, 'streaming': 3, 'wiki': 3}
+Idiomas: {'en': 19, 'generic': 2}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6095 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.50
+[OK] 11433 domínios carregados do ahmia.
+  ✓ links5nvguikrftuypcaspdbnruuut3gnnctjn2aswsbll5bbx22qxad.onion [chat/en]
+WARNING:root:Skipping URL links6jm6wp5ugsnei7rhwkthjjikhvoyqr347yspdu6xk3cs7732dqd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ links6jm6wp5ugsnei7rhwkthjjikhvoyqr347yspdu6xk3cs7732dqd.onion [wiki/en]
+  ✓ links4dsfvwe67r42cljtowmwns62vqthidw4gwy6ssfwawuavqsdaqd.onion [chat/en]
+  ✓ links42ylu5dcbcowocri7dmrq3mi2js6jjxclznfig5bezpoqf2fjad.onion [chat/en]
+WARNING:root:Skipping URL links6yxyremjffj6pvfvnghdtqsviweroheqxn2atnn2ug553kakvad.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ links6yxyremjffj6pvfvnghdtqsviweroheqxn2atnn2ug553kakvad.onion [wiki/en]
+  ✓ linksahelmsvpdzxxap5gq5azafi6j4ohwyq3udqnesklszksvmcrhyd.onion [chat/en]
+  ✓ linksaae52jjarzrlzyyxcdxicrrwdtrjqq5u7cvtvzl3ijfi2jwtnqd.onion [generic/en]
+  ✗ linksalgrla52xvb3ucytcj4o7dd3mn6rlfdky5dmvrbibtlbbx3omqd.onion [generic/generic]
+  ✓ linksalppya4j5n6xuodoqabbbxbabpliie2gptcbknhayz7vplgqgqd.onion [chat/en]
+  ✓ links7asi65t5y3mrbzzhsvhmhh5un6zzxb5hiahirhci4ceakfejiid.onion [chat/en]
+WARNING:root:Skipping URL linksazdlsplirbjtzf4qwpombjyse46vcc33zx5lltegfapnlacgjqd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linksazdlsplirbjtzf4qwpombjyse46vcc33zx5lltegfapnlacgjqd.onion [wiki/en]
+  ✓ linksausj36vazhhbwil6aopfquxq53lu326w3h3e236b2wioqngdiyd.onion [chat/en]
+  ✓ linksbfzgs7chf2jnb5e6dmtcpwrfoaskdpknbbtotnfnhbfhenhjyqd.onion [chat/en]
+  ✓ linksbp3w7go6wth2cquw7l4ihu5feamixjecgu6rgogolcwafta3lid.onion [chat/en]
+WARNING:root:Skipping URL linkscgvcp7rpfg46zne3fyexm3ja6tslehbuix7gfk4jkbzquqr2did.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkscgvcp7rpfg46zne3fyexm3ja6tslehbuix7gfk4jkbzquqr2did.onion [wiki/generic]
+  ✓ linksbvmf4ijekzoc5a6ttf6azb4i5nmvgljdq7agxg7xw2phpdxk4id.onion [chat/en]
+  ✓ linksfnfgeuogpthe6rfiair5pncaptoiclequqtqpgaxrgz527ugmyd.onion [chat/en]
+  ✓ linksghs57duilo33uptbmaltmaudsm7gwe4am6kmnxbe3f2lyvb5oqd.onion [streaming/en]
+  ✓ linkshthzkc7lo4zg2proo3hmnd4zbyt3zgcs4le42xvsgp4vdwfdmqd.onion [chat/en]
+  ✓ linksi7hwtpljlnpewjaxo7fl5blmvqssx26xgc7qlu4iopdsrjewuqd.onion [chat/en]
+  ✓ linksig232xp2btp3d4bdtn72drjlfuwkedqrsqep23b5yd6pn5qk7id.onion [chat/en]
+  ✓ linksj7zep5qtwmdikyqzchu36dj5jkyrpmy7gint3eya2hgfqmpcmqd.onion [generic/en]
+WARNING:root:Skipping URL linksienhqjmynbsxmzrisxokdyudflvoyit7jmlcqawarmz76qrayid.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linksienhqjmynbsxmzrisxokdyudflvoyit7jmlcqawarmz76qrayid.onion [wiki/en]
+  ✓ linksjbd7b3t4jpcez5sedmnqx3qitr6ip2wri4gcvp3xavj7a2cacqd.onion [streaming/en]
+  ✓ linksjud6yrp46pno3rwtsqzh4ryfkkxlckatpmvdevwdncqlcvhfhyd.onion [marketplace/en]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 24 | Erros: 1
+Categorias: {'chat': 14, 'wiki': 5, 'generic': 2, 'streaming': 2, 'marketplace': 1}
+Idiomas: {'en': 23, 'generic': 1}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6120 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.50
+[OK] 11433 domínios carregados do ahmia.
+  ✓ linkslhi7vv2kfbjx3tbfausly57gp5vxfssqvgabtjhojosukwnsrid.onion [generic/en]
+  ✓ linkskjwejchigqy5jodrcn5a6j4tzhhiwg6cri52lv46lysjjsiz5qd.onion [chat/en]
+  ✓ linkskvmgph3ugsfrfzyb37hnlwe6z3qucbqmequtjxqkhvqkrh442id.onion [generic/en]
+WARNING:root:Skipping URL linkslkhji7aaj6o2zqnnyqvnhr4bk4tzpzli5fef727nv2znxo4twqd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkslkhji7aaj6o2zqnnyqvnhr4bk4tzpzli5fef727nv2znxo4twqd.onion [streaming/en]
+  ✓ linksof4oqretuc3jykpwcbbdizxpopzkrmyvnuvpt6rbovowd6gjnqd.onion [chat/en]
+  ✓ linksozwgc57uxlfeaognj2xt4f7r4gu3yumjnhxgcmqlrtpzm7oacad.onion [generic/en]
+  ✓ linkspfca3y55k23lcbvyrrjrm6gboknk2y7lhohttvcfweleppibcqd.onion [chat/en]
+  ✓ linksqcoslllklke527ak6nsx6gzq7u3ibaz5gxmcakkmzbrhqjkc7yd.onion [chat/en]
+  ✓ linksq6y2m5l7gftojuk32oklylbkkrpb33pb6wfdd7jwlcupkrmm3yd.onion [generic/en]
+WARNING:root:Skipping URL linkstnvqzpwxadr3dx23rpx65ditow52yg5fh2dvwvsg7mtjbb3bnyd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkstnvqzpwxadr3dx23rpx65ditow52yg5fh2dvwvsg7mtjbb3bnyd.onion [wiki/en]
+WARNING:root:Skipping URL linksuacovdpxqxiyor4aqjo5nq5euxbahfdpepbed2l3honsyakynyd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linksuacovdpxqxiyor4aqjo5nq5euxbahfdpepbed2l3honsyakynyd.onion [wiki/en]
+  ✓ linksw7rw77azkfrmhjwurqos4waodlyj3vo6jmkm3nkde5t5k4dtdid.onion [streaming/en]
+  ✓ linksyirkkp2vkhupdysbeunejcolbmnfd6ekviyyziepzrnc7ed7jyd.onion [chat/en]
+WARNING:root:Skipping URL linksyzjlhw5ndzvn52376n6plkypnvnijdmmpq2busmnoyaahs3qmyd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linksyzjlhw5ndzvn52376n6plkypnvnijdmmpq2busmnoyaahs3qmyd.onion [wiki/en]
+  ✓ linksym52gbg2n2lhi62kyy6k7i4cqryt7wskoqjyl3k6tz6gioqhmyd.onion [chat/en]
+  ✓ linkszojfvue7j4o3oobe3tczatdrfzmbspyw6mv6xx4tdka6c4oacqd.onion [chat/en]
+WARNING:root:Skipping URL linkw4qclxj6x6cl4zky5xl675s5gxaehnjjkt3i6uujcrdbqilqfaad.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkw4qclxj6x6cl4zky5xl675s5gxaehnjjkt3i6uujcrdbqilqfaad.onion [wiki/en]
+WARNING:root:Skipping URL linkw4w4fzbfw72iutdvtmohtglalyg27gb3ns4ptupilckqau5qrcid.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkw4w4fzbfw72iutdvtmohtglalyg27gb3ns4ptupilckqau5qrcid.onion [wiki/en]
+  ✗ linkskilecph53ndn553pm2sgwnwr5tc6wrtnrmqerlbkzox4nnb35ad.onion [generic/generic]
+WARNING:root:Skipping URL linkwg5v5p5sctl2pflc24vwqnlz4mmosbmmtsij6tcaoixso4wmsjyd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkwg5v5p5sctl2pflc24vwqnlz4mmosbmmtsij6tcaoixso4wmsjyd.onion [wiki/en]
+  ✓ linkwigzhd3iljyrafwwodpe6jluw6otwpycgp7chy2oi5rza6gcgeqd.onion [chat/en]
+WARNING:root:Skipping URL linkwc37rrje2shrqezq77shp2oc35hzsukbxfqii7zrqpwypx4ioyqd.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkwc37rrje2shrqezq77shp2oc35hzsukbxfqii7zrqpwypx4ioyqd.onion [wiki/en]
+WARNING:root:Skipping URL linkwkjduztr2spjynk2amkkzlsvu3ahew4btax4kkae65o63tlgviad.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ linkwkjduztr2spjynk2amkkzlsvu3ahew4btax4kkae65o63tlgviad.onion [wiki/en]
+  ✓ linkz7jww4g5fbwao56adgjouwghvvfscuauw43rr7bbmth7hbk5sdyd.onion [chat/en]
+  ✗ linkw7jv2asnogpuvxbf2oqvrxxs3nyf4ji5ewbjonbsmw4ipvpa7aid.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 23 | Erros: 2
+Categorias: {'chat': 9, 'wiki': 8, 'generic': 4, 'streaming': 2}
+Idiomas: {'en': 23}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6145 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.50
+[OK] 11433 domínios carregados do ahmia.
+  ✓ lionznqc2hg2wsp5vgruqait4cpknihwlje6hkjyi52lcl5ivyf7bcad.onion [generic/en]
+  ✓ linkzjqmcpq5kqslizknsnp67mzkt3rqutzpv22nr5vxjdrpmeth6bqd.onion [chat/en]
+  ✓ liongraswmskvrcx3qw4s7nxkz32jgahsuwbgfquegtjhuqop3bzb5yd.onion [chat/en]
+  ✓ listc4ohkhzkfpevbnfbbqkuktvy2qubrtd5ypxcsvv4fhhjahyxjqad.onion [chat/en]
+  ✓ listdkzi4j5roimeoiwzcr5za42pmeftdh36bmoxrfypyxlth7njatyd.onion [streaming/en]
+  ✓ listdbaazx2flyslv5v3pasqym36z5iaw7zo7e7n4s4bm62bjwzulaad.onion [chat/en]
+  ✓ listem52r43xg3xrfsbbrucadxoeowq5j436dscwljmzamzaoowdxcqd.onion [marketplace/en]
+  ✓ listl4s2b5lsvlndkw6n7uvx6frbrptpsrc6o7zabzahcghekpymrpqd.onion [streaming/en]
+  ✓ listwmnz4k42w5axfo4g4dn6pm3kurpc556ujirenxx2nnwpynyoxcad.onion [chat/en]
+  ✓ litecnwpirlyqbiijjzvgkm2y5sp4kz6rjmrequbwe5idnuj2wryvqid.onion [marketplace/en]
+  ✓ litecrt4au3pxygajoane47epso44vumw35abdwmzlfcirlsftrboyad.onion [marketplace/en]
+  ✓ liqr2cbsjzxmpw6savgh274tuzl34x6cd56h7m7ceatnrokveffm66ad.onion [generic/generic]
+  ✓ litecu72kctgjpwe7ie7aqhz4lln7sp7edwpgjfk6mfwtzfksvczbzyd.onion [marketplace/en]
+  ✓ live55ypnhgwwvstie55ylgdj3n32micjfowiawhr36ptuewgd6ic7id.onion [chat/en]
+  ✓ lithuax7csmjfyjwwsbwgopomhlmcnmnbkllfivcigj2c3ol3dfqkbad.onion [chat/en]
+  ✓ liteczzpwwbhzcmugjbn7iwbi7hdg4q5vcc3sjoydqfafa7lxqhzjyad.onion [marketplace/en]
+WARNING:root:Skipping URL liveerkm5p2jseg2d4oavlqwbjrh3r62wwctidpphuow3mdiw2pvmrad.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ liveerkm5p2jseg2d4oavlqwbjrh3r62wwctidpphuow3mdiw2pvmrad.onion [wiki/en]
+  ✓ livehn2pcyrsulki5q6phmv3pzm6moer7vm7whhxqy7fxkkvz7ji62id.onion [chat/en]
+  ✓ livecchg5lfjdjj5jog52qosrvmf5s54uzksbw3k7ntazhwvcaqbegad.onion [chat/en]
+  ✗ listhwbmfgfidnttfam3mig52czfzjefz6tfagbvnb3dhj6qtzpxmbad.onion [generic/generic]
+  ✓ livekosrwvzf6gy6y2lt6qvkd24ib2j4r453b7emxffutfenaqd4reqd.onion [marketplace/en]
+  ✗ livemo5572b6234vrp56qmjlfxetnbrfiro4hwjkvzjx26kzschsi2qd.onion [generic/generic]
+  ✓ livetr32yp3nnrnhf3an6sliwihyjezbt3xv4pjcedikinucak62ndad.onion [streaming/en]
+WARNING:root:Skipping URL liveonjyzvrnrq3lthuejt4ydo65aq7t6kugbyeknfbmqou44akirjid.onion due to request error: 'NoneType' object has no attribute 'get'
+  ✓ liveonjyzvrnrq3lthuejt4ydo65aq7t6kugbyeknfbmqou44akirjid.onion [streaming/en]
+  ✗ live6g5krc5k5pbtxzzpoxsmcsueqqpblebryl2qfubwt377hjsfb3ad.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 22 | Erros: 3
+Categorias: {'chat': 9, 'marketplace': 6, 'streaming': 4, 'generic': 2, 'wiki': 1}
+Idiomas: {'en': 21, 'generic': 1}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6170 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.50
+[OK] 11433 domínios carregados do ahmia.
+  ✓ ljddh7n4st26xv56vgq6b3mafhq4lrsjzluidsjownsyc3wj7ym2jzid.onion [chat/en]
+  ✓ ljnw7gt274nguqm24clsqi6ksjm2zrwaqhig4ynjzscvbymnv2mjjayd.onion [streaming/en]
+  ✓ livk2fpdv4xjnjrbxfz2tw3ptogqacn2dwfzxbxr3srinryxrcewemid.onion [streaming/en]
+  ✗ lk5exfnzwwlxyxh3pn622457wpntuitbzstm4pxdz6jbkidopjza3jid.onion [generic/generic]
+  ✓ lk2id6jvmpwoqkuzrtge3tizr6prvha2zo7gbfnbgtp35vy2xm5pbxid.onion [marketplace/en]
+  ✓ lkqzmvsgmqq5kiu5opho4wrqsp4xqqezk7nmlfsqoo2yi4mq2a42lpad.onion [streaming/en]
+  ✓ lkjyjjw4jd3gbzv5lfvvonnvuyvi3oaz5257uggjzvmisnic32rcr5id.onion [marketplace/en]
+  ✓ lkbp4mwcptpce6ywqqxfcpyxnevgrap7m5c53jbn6a6jzxt5quwja2ad.onion [marketplace/generic]
+  ✓ liz5vpca6b2dpxapakhpm3y75ootabquq7wmbol23d6kuc33mpmygdad.onion [marketplace/en]
+  ✓ llbwlzmrmiqcejhhkysrg3rwc56aal6zhcmxnnakvdafhzwpgbjd3lyd.onion [streaming/en]
+  ✓ ll5mxe3kp2n46pzo5aswsj2efk2t4h5gqkqz6xy27zarsavgjwkboaad.onion [generic/generic]
+  ✓ llfivrmjqsooshq2xqrmdqkdqfortbccwjai2kx44yckarur45zl5eid.onion [chat/generic]
+  ✓ lldan5gahapx5k7iafb3s4ikijc4ni7gx5iywdflkba5y2ezyg6sjgyd.onion [chat/en]
+  ✓ llmqmo5gkzukt2yg5btozekjdn4itzrhpiyr3qakrurmqykrvv3kncid.onion [marketplace/en]
+  ✗ lllllll7uz2fiawnnrecsnacfchs77gzrb4rzqalgimwauyllp7cr3id.onion [generic/generic]
+  ✓ llwape5ageg4nkuftzqs2di2qcoayqqulc3u5m72ay47n2syavqdryid.onion [streaming/pt]
+  ✓ lmoney3jlirnqvcnxv6msy5ol6qyjwisfvk63v3grvkt7hzyyh5tjsad.onion [marketplace/en]
+  ✓ llmw4onj4zpupbrbd4nibs6hwpcighu64vcpjytktwgycd3hyvodnqid.onion [generic/generic]
+  ✓ lnemailv7hfb2txbk7qihz32p4j376wv7pn2xa3nmfwj6lrdhs5nf3ad.onion [marketplace/en]
+  ✗ ln4mb5gvoqgjnaicree57ofxibofn2ea2cslsejvhyvvh7dpyj2hzdad.onion [generic/generic]
+  ✓ lnn6isw6tkbmplxe7eisjpf7nw6mmbwc7wjjuyhur77oistyrctj5lyd.onion [streaming/en]
+  ✓ lmoneyu4apwxues2ahrh75oop333gsdqro67qj2vkgg3pl5bnc2zyyyd.onion [marketplace/en]
+  ✗ lnm7xb3kewnw4ejespdk3t4fn5stwiqiavcpej3hvnoy22w6gp25vpyd.onion [generic/generic]
+  ✗ lmoneylmwki7lv4vtijsqr23p6odzpyaw3uffsbm6f5e3osy3wkrfvad.onion [generic/generic]
+  ✗ lo52rld4cl2ezr4cd73yxn7ru2fh3dtqtmjzjuraquv7bdubhabvkkad.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 19 | Erros: 6
+Categorias: {'marketplace': 8, 'streaming': 6, 'chat': 3, 'generic': 2}
+Idiomas: {'en': 14, 'generic': 4, 'pt': 1}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6195 URLs.
+[OK] Tor proxy ativo. exit node: 192.42.116.49
+[OK] 11433 domínios carregados do ahmia.
+  ✓ lockbit24pegjquuwbmwjlvyivmyaujf33kvlepcxyncnugm3zw73myd.onion [marketplace/en]
+  ✓ lobkf7b4fynvdetmmpdo4y7mrnlrbkhkpevdrjeoqss6wa2egsdrckyd.onion [marketplace/en]
+  ✓ localpptlaj7y6i6izn72clubj7bu3gbuvd7bii5kd2eyzc5jcxtucad.onion [chat/en]
+  ✓ lockbit33chewwx25efq6dgkhkw4u7nefudq4ijkuamjfd7x73on6dyd.onion [marketplace/en]
+  ✓ lockbit6vhrjaqzsdj6pqalyideigxv4xycfeyunpx35znogiwmojnid.onion [marketplace/en]
+  ✓ lockbit3m6lgexvokfxyqcdnykdvhye7aftic6p4uh7mnz42h25ooiid.onion [marketplace/en]
+  ✓ lockbit3753ekiocyo5epmpy6klmejchjtzddoekjlnt6mu3qh4de2id.onion [marketplace/en]
+  ✓ lockbit2zfxali5yrplh5swimxva5o4xqi3zpbc24tczgffxh7msrvyd.onion [marketplace/en]
+  ✓ lockbit7gtvdkx7j3tyfpw43zv6majh2owrsp3zilhpm36a3fldqtyqd.onion [marketplace/en]
+  ✓ lockbit7tnu7whmaqnnlmvnoxzejssvr6vkcoovg35encvnp24pikvyd.onion [marketplace/en]
+  ✗ lockbit7z2og4jlsmdy7dzty3g42eu3gh2sx2b6ywtvhrjtss7li4fyd.onion [generic/generic]
+  ✗ lockbit7z2jwcskxpbokpemdxmltipntwlkmidcll2qirbu7ykg46eyd.onion [generic/generic]
+  ✗ lockbit7z2mmiz3ryxafn5kapbvbbiywsxwovasfkgf5dqqp5kxlajad.onion [generic/generic]
+  ✗ lockbit7z355oalq4hiy5p7de64l6rsqutwlvydqje56uvevcc57r6qd.onion [generic/generic]
+  ✗ lockbit7z37ntefjdbjextn6tmdkry4j546ejnru5cejeguitiopvhad.onion [generic/generic]
+  ✗ lockbit7z36ynytxwjzuoao46ck7b3753gpedary3qvuizn3iczhe4id.onion [generic/generic]
+  ✗ lockbit7z3ddvg5vuez2vznt73ljqgwx5tnuqaa2ye7lns742yiv2zyd.onion [generic/generic]
+  ✗ lockbit7z3hv7ev5knxbrhsvv2mmu2rddwqizdz4vwfvxt5izrq6zqqd.onion [generic/generic]
+  ✗ lockbit7z3azdoxdpqxzliszutufbc2fldagztdu47xyucp25p4xtqad.onion [generic/generic]
+  ✗ lockbit7z3ujnkhxwahhjduh5me2updvzxewhhc5qvk2snxezoi5drad.onion [generic/generic]
+  ✗ lockbit7z4bsm63m3dagp5xglyacr4z4bwytkvkkwtn6enmuo5fi5iyd.onion [generic/generic]
+  ✗ lockbit7z4cgxvictidwfxpuiov4scdw34nxotmbdjyxpkvkg34mykyd.onion [generic/generic]
+  ✗ lockbit7z4k5zer5fbqi2vdq5sx2vuggatwyqvoodrkhubxftyrvncid.onion [generic/generic]
+  ✓ lockbit7z55tuwaflw2c7torcryobdvhkcgvivhflyndyvcrexafssad.onion [marketplace/en]
+  ✗ lockbit7z4ndl6thsct34yd47jrzdkpnfg3acfvpacuccb45pnars2ad.onion [generic/generic]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 11 | Erros: 14
+Categorias: {'marketplace': 10, 'chat': 1}
+Idiomas: {'en': 11}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6220 URLs.
+[OK] Tor proxy ativo. exit node: 104.244.77.208
+[OK] 11433 domínios carregados do ahmia.
+  ✓ lockbit7z5hwf6ywfuzipoa42tjlmal3x5suuccngsamsgklww2xgyqd.onion [marketplace/en]
+  ✓ lockbit7z5ltrhzv46lsg447o3cx2637dloc3qt4ugd3gr2xdkkkeayd.onion [marketplace/en]
+  ✓ lockbit7z57mkicfkuq44j6yrpu5finwvjllczkkp2uvdedsdonjztyd.onion [marketplace/en]
+  ✓ lockbit7z5ehshj6gzpetw5kso3onts6ty7wrnneya5u4aj3vzkeoaqd.onion [marketplace/en]
+  ✗ lockbit7z6f3gu6rjvrysn5gjbsqj3hk3bvsg64ns6pjldqr2xhvhsyd.onion [generic/generic]
+  ✓ lockbit7z6choojah4ipvdpzzfzxxchjbecnmtn4povk6ifdvx2dpnid.onion [marketplace/en]
+  ✓ lockbit7z6dqziutocr43onmvpth32njp4abfocfauk2belljjpobxyd.onion [marketplace/en]
+  ✓ lockbit7z6qinyhhmibvycu5kwmcvgrbpvtztkvvmdce5zwtucaeyrqd.onion [marketplace/en]
+  ✓ lockbitabmbzz652qeqd7yztgugcihpy4s4f6zuqi3jx32rzjylsn7ad.onion [marketplace/en]
+  ✓ lockbitbgtyqtgutvasrld5gx23ozo32y4xkjrby6bte3zyvjdlyoxyd.onion [marketplace/en]
+  ✓ lockbitapt67g6rwzjbcxnww5efpg4qok6vpfeth7wx3okj52ks4wtad.onion [generic/generic]
+  ✓ lockbitbuy3gsqwrgavmi3ehlmk26h6g3aeyslnq4yksjcbpt6ij5cqd.onion [marketplace/en]
+  ✓ lockbitdx4kanolaotenc3nmonlxv5enmhxdh2lk54rirvcdsljfbjyd.onion [marketplace/en]
+  ✓ lockbitdzdbv5dh6ncf65c22tdgej72sty6ikiieuinibh6icnzrv4yd.onion [marketplace/en]
+  ✓ lockbitf75dfwq4bsec3iaytf6z5z6dmstx3g35grn74ndxy3py2ozyd.onion [marketplace/en]
+  ✓ lockbitfsvf75glg226he5inkfgtuoakt4vgfhd7nfgghx5kwz5zo3ad.onion [generic/en]
+  ✓ lockbitfbinpwhbyomxkiqtwhwiyetrbkb4hnqmshaonqxmsrqwg7yad.onion [generic/generic]
+  ✓ lockbit7z6rzyojiye437jp744d4uwtff7aq7df7gh2jvwqtv525c4yd.onion [marketplace/en]
+  ✗ lockbitfnszjao7hayqsd424m74k5jxc52hozvabjrut7pjfsfaaaoad.onion [generic/generic]
+  ✓ lockbitjqfuyrkxiie6bcly6ow4sh6lmyuyvyats5hcpe5e6hbuhikyd.onion [marketplace/en]
+  ✓ lockbithn5a2qgf4ojvut3q25yylrauvjxrz6sjdd4teas65osru2lqd.onion [marketplace/en]
+  ✓ lockbitgf43c7avhx5wesx5ambjgbormhwc2tujsy6lvg6drkjhnjryd.onion [marketplace/en]
+  ✓ lockbitjvv72zmzgcqgn63ehjaapffubbwjwi32gzdbrahxjy3hzrxid.onion [marketplace/en]
+  ✓ lockbitnpobu6luzzlxb7br5uyqnmeruwimpjuw2kv442nvxd6sufsad.onion [marketplace/en]
+  ✓ lockbitkybiqhyv64vdaamz7uf2ymjoafyalx3e6spmmsz5xyk5nbcad.onion [marketplace/en]
+[INFO] Crawl concorrente: 4 threads.
+
+=== Relatório ===
+Total: 25 | Sucesso: 23 | Erros: 2
+Categorias: {'marketplace': 20, 'generic': 3}
+Idiomas: {'en': 21, 'generic': 2}
+[WARN] análise falhou: 'list' object has no attribute 'get'
+[INFO] Já visitados: 6245 URLs.
+[OK] Tor proxy ativo. exit node: 104.244.77.208
+[OK] 11433 domínios carregados do ahmia.
+  ✓ lockbitst7jglgbsj7aijbiqvxwmlhcs7e7gb3eeqx7rjtxsjklw4yyd.onion [marketplace/en]
+  ✓ lockbitotfzuq2lpyydzgbhelps2mcz62cpix4nzpcyaak5444iwfmqd.onion [marketplace/en]
+  ✓ lockbitnthkolp2mfa5byjrx2mcbleruktoiawsprqrducnrzilchjid.onion [marketplace/en]
+  ✓ lockbitwnklgh3lt6umrbiztgzl6qujtovdtcovdjhavepp7bpvcmfid.onion [marketplace/en]
+  ✓ lockbity44loulvujiaoels7knti2tfsnglclnse22syaa6x3vpqp7yd.onion [marketplace/en]
+  ✓ lockbitqth2ij5cdqmj4cdchoh3etnlbh74utqviwqb5svvhxygnmoqd.onion [marketplace/en]
+  ✓ lockbity3v2rhjjjt6opcgvdrrlvdbrt3p2wqmxmq4cm36cchphdy6qd.onion [marketplace/en]
+  ✓ lockbitynxdcxtuvma5deq5pxtnqoacftuigkk37xjq3whefozdpcuad.onion [marketplace/en]
+  ✓ lockbity7oz7kjcdcgacvihhsli6oimuodmmaftw5omdpgscxdc3mhid.onion [marketplace/en]
+  ✓ lockbox2z4fgmbwrq26nzspezeoq6avddprlekcp6y6yava4nfi7zeid.onion [generic/en]
+  ✓ lockbityq64mwtobqqcr3iwxs5q4o7iliuv72gbx4vflggj4m4wqekad.onion [marketplace/en]
+  ✓ logindvvjvaxwwhi7pa5v3fmzlxld3gndmkona6dti4v3ovn6y5v2ead.onion [chat/en]
+  ✓ loginh5rghosdkbiktcl4zdwg6cx7fjc33yoeuvsqahoqtqclgwamfqd.onion [generic/en]
+  ✓ login74knd2o2qcdz2cwirzuui6ffiyvgdw2neiavl5cmikerrf5rmad.onion [chat/en]
+  ✓ loginza33uso3lhvnuipveuojtjhghj5n7bp75exfvyasfjn3762zmyd.onion [generic/en]
+  ✗ loginjwgphqogs56u7j5uobrvvfaufscqqw6osmdibqyv6l67czhvpad.onion [generic/generic]
+  ✓ loginisbg2bjmdnvvsb4k7jc7h467uelcaweou6nglfdzrxq6oa2q2qd.onion [chat/en]
+  ✓ loginrznc4tabuccgteztfpiba5hf244wdhwavtfilbwe4762tbqjlqd.onion [streaming/en]
+  ✓ logits3bzwqltb7mtnoqozgktz3nlcfkg5l3gtvhptp6m6byt35fqryd.onion [chat/en]
+  ✓ logithzyy2rziq2aea5oftwyl6wyb3stiu64jimqobe2tjhm3d6rueqd.onion [streaming/en]
+  ✓ logitgclswhyh65gqpt35e34ve4ntxyo5z4vmuz66tmattho4eajv5ad.onion [chat/en]
+  ✓ logs43ptcymn7gyq566hkny34lbicxgd5k7wiixk3okbmddvburwjwyd.onion [marketplace/en]
+  ✓ logsapz5xt33fdq34myigorladipiqe34mvb2smffza62xrfceaitxqd.onion [chat/en]
+  ✓ logsc5u2njgpbqj4cckpg4qae2jef6p6g4ujxmc6o7je3invcdez7nid.onion [generic/en]
