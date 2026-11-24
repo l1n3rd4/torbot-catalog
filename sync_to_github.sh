@@ -8,7 +8,7 @@ git add \
     catalog.csv results.json visited_urls.json \
     run_crawl.sh validate_crawl.sh fetch_query.py \
     dark-web-crawler-v3.py .gitignore sync_to_github.sh \
-    tools
+    tools crawl.log
 
 # 2) Verifica se há mudancas stagadas
 if git diff --cached --quiet; then
