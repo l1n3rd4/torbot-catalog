@@ -4,11 +4,13 @@ set -u
 cd /home/ubuntu/torbot-catalog || { echo "ERRO: diretorio nao encontrado"; exit 1; }
 
 # 1) Adiciona os arquivos de interesse (outputs + scripts + source + .gitignore)
+#    Inclui os novos arquivos do novo sistema crawl_v4.py
 git add \
     catalog.csv results.json visited_urls.json \
     run_crawl.sh validate_crawl.sh fetch_query.py \
     dark-web-crawler-v3.py .gitignore sync_to_github.sh \
-    tools crawl.log
+    tools crawl.log crawl_v4.py results_v4.json \
+    check_db.py check_db2.py check_pt.py catalog.csv.bak
 
 # 2) Verifica se há mudancas stagadas
 if git diff --cached --quiet; then
