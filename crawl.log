@@ -393,3 +393,267 @@ Fim de acteam2mf2ubo5hapf2dgsj4h7kjembfy4c6pmlkpueobucl2b3oyyqd.onion (03:14:17)
 [OK] 11433 domínios carregados do ahmia.
 [INFO] Domínios a processar: 0
 [INFO] Iniciando descoberta recursiva em http://ajapzaz4se7hybwcjtj6sbwoaurell324xwyjihim3mrbdixk3up3xyd.onion...
+WARNING:root:Skipping URL http://ajapzaz4se7hybwcjtj6sbwoaurell324xwyjihim3mrbdixk3up3xyd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'pt': 1}
+Fim de ajapzaz4se7hybwcjtj6sbwoaurell324xwyjihim3mrbdixk3up3xyd.onion (03:14:28)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://altenrtbl5uoezqaeterykek3cfjuw3zmuqk6td6niijaw3ol4ms6xid.onion...
+WARNING:root:Skipping URL http://altenrtbl5uoezqaeterykek3cfjuw3zmuqk6td6niijaw3ol4ms6xid.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'en': 1}
+Fim de altenrtbl5uoezqaeterykek3cfjuw3zmuqk6td6niijaw3ol4ms6xid.onion (03:14:43)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://amate6wdc3x667beqchdixwcvjigh3g7uwo3gclhplebzl6nowxbujyd.onion...
+WARNING:root:Skipping URL http://amate6wdc3x667beqchdixwcvjigh3g7uwo3gclhplebzl6nowxbujyd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 2
+
+=== Relatório ===
+Total: 2 | Sucesso: 2 | Erros: 0
+Categorias: {'wiki': 1, 'forum': 1}
+Idiomas: {'en': 2}
+Fim de amate6wdc3x667beqchdixwcvjigh3g7uwo3gclhplebzl6nowxbujyd.onion (03:15:01)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://anabosjwbomvvega7daowebijxt76yqmff4bq53xefd2bhovvfss7eyd.onion...
+WARNING:root:Skipping URL http://anabosjwbomvvega7daowebijxt76yqmff4bq53xefd2bhovvfss7eyd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 2
+
+=== Relatório ===
+Total: 2 | Sucesso: 2 | Erros: 0
+Categorias: {'wiki': 1, 'marketplace': 1}
+Idiomas: {'en': 2}
+Fim de anabosjwbomvvega7daowebijxt76yqmff4bq53xefd2bhovvfss7eyd.onion (03:15:21)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://anonylsjkwwhlsp5ain7cqdufeukm6njdir4orbrlmobhlkwmbwcahad.onion...
+WARNING:root:Skipping URL http://anonylsjkwwhlsp5ain7cqdufeukm6njdir4orbrlmobhlkwmbwcahad.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 2
+
+=== Relatório ===
+Total: 2 | Sucesso: 2 | Erros: 0
+Categorias: {'wiki': 1, 'forum': 1}
+Idiomas: {'en': 2}
+Fim de anonylsjkwwhlsp5ain7cqdufeukm6njdir4orbrlmobhlkwmbwcahad.onion (03:15:38)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://anzsyqy4gftso72grj6cblzwkonfjnupxtzswbqcyyjxivudupe2z6ad.onion...
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 0 | Erros: 1
+Categorias: {}
+Idiomas: {}
+Fim de anzsyqy4gftso72grj6cblzwkonfjnupxtzswbqcyyjxivudupe2z6ad.onion (03:16:21)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://apathyrcsqlcrvsq32sdymfljt6ygo66boekw2rhpydqancgafvmdlid.onion...
+WARNING:root:Skipping URL http://apathyrcsqlcrvsq32sdymfljt6ygo66boekw2rhpydqancgafvmdlid.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'generic': 1}
+Fim de apathyrcsqlcrvsq32sdymfljt6ygo66boekw2rhpydqancgafvmdlid.onion (03:16:29)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://apkh6rke3zwxkapwt6y3cjslpg5q7tcgrepbqxdrhlq3c33jpe4lv6qd.onion...
+WARNING:root:Skipping URL http://apkh6rke3zwxkapwt6y3cjslpg5q7tcgrepbqxdrhlq3c33jpe4lv6qd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'en': 1}
+Fim de apkh6rke3zwxkapwt6y3cjslpg5q7tcgrepbqxdrhlq3c33jpe4lv6qd.onion (03:16:38)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://arf5sgoqvzde4vp6coqlmdjroqdngbq3rm5yd6eahndgxadmnieiivyd.onion...
+WARNING:root:Skipping URL http://arf5sgoqvzde4vp6coqlmdjroqdngbq3rm5yd6eahndgxadmnieiivyd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'en': 1}
+Fim de arf5sgoqvzde4vp6coqlmdjroqdngbq3rm5yd6eahndgxadmnieiivyd.onion (03:16:54)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://asozialltdsjhcz5gmpdj4slfin2u3udxmcy5kepsgsgd5w7le4gifad.onion...
+WARNING:root:Skipping URL http://asozialltdsjhcz5gmpdj4slfin2u3udxmcy5kepsgsgd5w7le4gifad.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'generic': 1}
+Fim de asozialltdsjhcz5gmpdj4slfin2u3udxmcy5kepsgsgd5w7le4gifad.onion (03:17:05)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://aztiibhurt3cvzmx47ucgd3xd5gjb76duozpgrlu46bq46kabcbv3sqd.onion...
+WARNING:root:Skipping URL http://aztiibhurt3cvzmx47ucgd3xd5gjb76duozpgrlu46bq46kabcbv3sqd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'generic': 1}
+Fim de aztiibhurt3cvzmx47ucgd3xd5gjb76duozpgrlu46bq46kabcbv3sqd.onion (03:17:25)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://bakarg6rvbuiu6zeyzbm6vs2abmcglo6o5az6xz2gqc6gpxtbaemcrid.onion...
+WARNING:root:Skipping URL http://bakarg6rvbuiu6zeyzbm6vs2abmcglo6o5az6xz2gqc6gpxtbaemcrid.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'en': 1}
+Fim de bakarg6rvbuiu6zeyzbm6vs2abmcglo6o5az6xz2gqc6gpxtbaemcrid.onion (03:17:36)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://bcgam5i7wt3lstsihjfgngjs74vpznosx4chpc3y565xkbbpgosjkaid.onion...
+WARNING:root:Skipping URL http://bcgam5i7wt3lstsihjfgngjs74vpznosx4chpc3y565xkbbpgosjkaid.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'generic': 1}
+Fim de bcgam5i7wt3lstsihjfgngjs74vpznosx4chpc3y565xkbbpgosjkaid.onion (03:17:44)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://bdy2ewickcnh3ecw6sehy6km5kzxxqnohemd3svz6kzfqut2qdubrnqd.onion...
+WARNING:root:Skipping URL http://bdy2ewickcnh3ecw6sehy6km5kzxxqnohemd3svz6kzfqut2qdubrnqd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'en': 1}
+Fim de bdy2ewickcnh3ecw6sehy6km5kzxxqnohemd3svz6kzfqut2qdubrnqd.onion (03:18:02)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://bitcojjebw5yl3iyh6oyglkdin3ytazk4voiahlkidruowfas4d6m4yd.onion...
+WARNING:root:Skipping URL http://bitcojjebw5yl3iyh6oyglkdin3ytazk4voiahlkidruowfas4d6m4yd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 2
+
+=== Relatório ===
+Total: 2 | Sucesso: 2 | Erros: 0
+Categorias: {'wiki': 1, 'forum': 1}
+Idiomas: {'en': 2}
+Fim de bitcojjebw5yl3iyh6oyglkdin3ytazk4voiahlkidruowfas4d6m4yd.onion (03:18:20)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://bizzle7qdloigdiiqionusf7dfw6tmrqhtjwkjviwtjmwovphqftvaid.onion...
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 0 | Erros: 1
+Categorias: {}
+Idiomas: {}
+Fim de bizzle7qdloigdiiqionusf7dfw6tmrqhtjwkjviwtjmwovphqftvaid.onion (03:19:03)
+[OK] Tor proxy ativo. exit node: 204.8.96.144
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://bj5hp4onm4tvpdb5rzf4zsbwoons67jnastvuxefe4s3v7kupjhgh6qd.onion...
+WARNING:root:Skipping URL http://bj5hp4onm4tvpdb5rzf4zsbwoons67jnastvuxefe4s3v7kupjhgh6qd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 6
+
+=== Relatório ===
+Total: 6 | Sucesso: 6 | Erros: 0
+Categorias: {'marketplace': 4, 'wiki': 1, 'generic': 1}
+Idiomas: {'en': 6}
+Fim de bj5hp4onm4tvpdb5rzf4zsbwoons67jnastvuxefe4s3v7kupjhgh6qd.onion (03:20:08)
+[OK] Tor proxy ativo. exit node: 204.137.14.53
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://bkcuefn5w7whszg3hgshivmyhakewxisb6sukybjxisigizqkn5adsid.onion...
+WARNING:root:Skipping URL http://bkcuefn5w7whszg3hgshivmyhakewxisb6sukybjxisigizqkn5adsid.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'en': 1}
+Fim de bkcuefn5w7whszg3hgshivmyhakewxisb6sukybjxisigizqkn5adsid.onion (03:20:15)
+[OK] Tor proxy ativo. exit node: 192.42.116.49
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://bnbvfeptdfihv62qx5eg5vgtd7nwzqpgaqeerus7metbr7qkrchdxhid.onion...
+WARNING:root:Skipping URL http://bnbvfeptdfihv62qx5eg5vgtd7nwzqpgaqeerus7metbr7qkrchdxhid.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'en': 1}
+Fim de bnbvfeptdfihv62qx5eg5vgtd7nwzqpgaqeerus7metbr7qkrchdxhid.onion (03:20:27)
+[OK] Tor proxy ativo. exit node: 192.42.116.49
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://book2mzym5j3spfoksg4cvpm6ogablr7axakbjs7wu5rhkkkpwacqkqd.onion...
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 0 | Erros: 1
+Categorias: {}
+Idiomas: {}
+Fim de book2mzym5j3spfoksg4cvpm6ogablr7axakbjs7wu5rhkkkpwacqkqd.onion (03:21:10)
+[OK] Tor proxy ativo. exit node: 192.42.116.49
+[OK] 11433 domínios carregados do ahmia.
+[INFO] Domínios a processar: 0
+[INFO] Iniciando descoberta recursiva em http://bookp7scylx7eh3fs5ooujip2thrtmfstd4jurkhp7poycykm5p22mqd.onion...
+WARNING:root:Skipping URL http://bookp7scylx7eh3fs5ooujip2thrtmfstd4jurkhp7poycykm5p22mqd.onion due to request error: 'NoneType' object has no attribute 'get'
+[INFO] Descobrindo recursivamente... (max depth=5)
+[INFO] Descoberta concluída. Total: 1
+
+=== Relatório ===
+Total: 1 | Sucesso: 1 | Erros: 0
+Categorias: {'wiki': 1}
+Idiomas: {'en': 1}
+Fim de bookp7scylx7eh3fs5ooujip2thrtmfstd4jurkhp7poycykm5p22mqd.onion (03:21:18)
+[ERRO] Tor inativo: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)
